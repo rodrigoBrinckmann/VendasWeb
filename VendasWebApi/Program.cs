@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using VendasWebCore.Repositories;
+using VendasWebInfrastructure;
+using VendasWebInfrastructure.Persistence.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<VendasWebDbContext>
+    (options => options.UseSqlServer
+    (builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
