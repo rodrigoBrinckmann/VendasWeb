@@ -17,7 +17,7 @@ namespace ServicesTests
         {
             //arrange
             Produto produto = new Produto();
-            _produtoRepositoryMock.Setup(s => s.ListarProdutoEspecífico(It.IsAny<int>()));
+            _produtoRepositoryMock.Setup(s => s.ListarProdutoEspecífico(It.IsAny<int>())).ReturnsAsync(produto);
             var service = GetService();
             //act
             var result = await service.ListarProdutoAsync(1);
