@@ -58,7 +58,7 @@ namespace VendasWebApi.Controllers
         {
             try
             {
-                _itensPedidoService.DeletarItensPedidoAsync(id);                
+                await _itensPedidoService.DeletarItensPedidoAsync(id);                
                 return Ok();
             }
             catch (DbUpdateConcurrencyException ex)
