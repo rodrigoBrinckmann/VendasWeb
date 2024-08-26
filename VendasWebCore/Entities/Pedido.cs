@@ -16,8 +16,7 @@ namespace VendasWebCore.Entities
         public string NomeCliente { get; set; } = string.Empty;        
         public string EmailCLiente { get; set; } = string.Empty;
         public DateTime DataCriacao { get; set; }
-        public bool Pago { get; set; }
-        [JsonIgnore]
+        public bool Pago { get; set; }        
         public List<ItensPedido>? ItensPedidos { get; set; }
 
         public void Update(Pedido pedido)

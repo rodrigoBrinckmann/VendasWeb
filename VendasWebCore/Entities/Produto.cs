@@ -14,8 +14,7 @@ namespace VendasWebCore.Entities
         [JsonIgnore]
         public int IdProduto { get; set; }        
         public string NomeProduto { get; set; } = string.Empty;               
-        public decimal Valor { get; set; }
-        [JsonIgnore]
+        public decimal Valor { get; set; }        
         public List<ItensPedido>? ItensPedidos { get; set; }
 
 
