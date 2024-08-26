@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VendasWebApplication.ViewModels;
-using VendasWebCore.Entities;
+﻿using VendasWebCore.Entities;
 using VendasWebCore.Repositories;
 using VendasWebCore.Services;
+using VendasWebCore.ViewModels;
 
 namespace VendasWebApplication.Services
 {

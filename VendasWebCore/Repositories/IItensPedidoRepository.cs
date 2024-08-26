@@ -13,7 +13,7 @@ namespace VendasWebCore.Repositories
         Task<ItensPedido> EditarItensPedidoAsync(int id, ItensPedido itensPedido);
         Task DeletarItensPedido(int id);
         Task<List<ItensPedido>> ListarItensPedido();
-        Task<List<ItensPedido>> ListarItensPedidoEspecífico(int id);
+        Task<ItensPedido> ListarItensPedidoEspecífico(int id);
         Task SaveChangesASync();
     }    
 }

@@ -38,7 +38,7 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Produto request)
+        public async Task<IActionResult> EditarProduto(int id, [FromBody] Produto request)
         {
             try
             {                
@@ -51,12 +51,12 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeletarProduto(int id)
         {
             try
             {
-                await _produtoService.DeletarProdutoAsync(id);                
-                return Ok();
+                await _produtoService.DeletarProdutoAsync(id);
+                return Ok("Produto deletado da base de dados");
             }
             catch (DbUpdateConcurrencyException ex)
             {

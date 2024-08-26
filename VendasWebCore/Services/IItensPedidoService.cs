@@ -10,7 +10,7 @@ namespace VendasWebCore.Services
     public interface IItensPedidoService
     {
         Task<List<ItensPedido>> ListarItensPedidosAsync();
-        Task<List<ItensPedido>> ListarItensPedidoAsync(int id);
+        Task<ItensPedido> ListarItensPedidoAsync(int id);
         Task CadastrarItensPedidoAsync(ItensPedido itensPedido);
         Task<ItensPedido> EditarItensPedidoAsync(int id, ItensPedido itensPedido);
         Task DeletarItensPedidoAsync(int id);

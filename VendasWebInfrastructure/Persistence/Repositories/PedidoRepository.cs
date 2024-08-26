@@ -1,15 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VendasWebCore.Calculation;
 using VendasWebCore.Entities;
 using VendasWebCore.Repositories;
-using VendasWebApplication.ViewModels;
 using VendasWebCore.ViewModels;
-using VendasWebCore.Calculation;
 
 namespace VendasWebInfrastructure.Persistence.Repositories
 {

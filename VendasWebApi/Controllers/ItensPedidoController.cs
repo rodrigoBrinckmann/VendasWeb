@@ -18,22 +18,21 @@ namespace VendasWebApi.Controllers
         {
             _itensPedidoService = itensPedidoService;
         }
-
-        // GET: api/<PedidoController>
+                
         [HttpGet]
         public async Task<IActionResult> GetAllItensPedidoAsync()
         {            
             return Ok(await _itensPedidoService.ListarItensPedidosAsync());
         }
 
-        // GET api/<PedidoController>/5
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItensPedidoByIdAsync(int id)
         {            
             return Ok(await _itensPedidoService.ListarItensPedidoAsync(id));
         }
 
-        // POST api/<PedidoController>
+        
         [HttpPost]
         public async Task<IActionResult> CadastrarItensPedido([FromBody] ItensPedido itensPedido)
         {
@@ -43,23 +42,23 @@ namespace VendasWebApi.Controllers
 
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] ItensPedido request)
+        public async Task<IActionResult> EditarItemPedido(int id, [FromBody] ItensPedido request)
         {
             var itensPedido = await _itensPedidoService.EditarItensPedidoAsync(id, request);
             if (itensPedido.IdPedido != 0)
-                return Ok();
+                return Ok("ItemPedido editado com sucesso");
             else
                 return BadRequest("ItensPedido não encontrado na base de dados");
             
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeletarItemPedido(int id)
         {
             try
             {
                 await _itensPedidoService.DeletarItensPedidoAsync(id);                
-                return Ok();
+                return Ok("ItemPedido deletado com sucesso");
             }
             catch (DbUpdateConcurrencyException ex)
             {

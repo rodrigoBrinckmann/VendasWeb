@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VendasWebCore.Entities;
-using VendasWebCore.Repositories;
 using VendasWebCore.Services;
-using VendasWebInfrastructure.Persistence.Repositories;
 
 namespace VendasWebApi.Controllers
 {
@@ -21,7 +18,7 @@ namespace VendasWebApi.Controllers
 
         
         [HttpGet]
-        public async Task<IActionResult> GetAllProductsAsync()
+        public async Task<IActionResult> GetAllOrdersAsync()
         {     
             var listaPedidos = await _pedidoService.ListarPedidosAsync();
             return Ok(listaPedidos);
@@ -29,7 +26,7 @@ namespace VendasWebApi.Controllers
 
         
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPedidoByIdAsync(int id)
+        public async Task<IActionResult> GetOrderByIdAsync(int id)
         {         
             var pedido = await _pedidoService.ListarPedidoAsync(id);
             return Ok(pedido);
@@ -45,7 +42,7 @@ namespace VendasWebApi.Controllers
 
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Pedido request)
+        public async Task<IActionResult> EditarPedido(int id, [FromBody] Pedido request)
         {
             try
             {                
@@ -59,12 +56,12 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeletarPedido(int id)
         {
             try
             {             
                 await _pedidoService.DeletarPedidoAsync(id);
-                return Ok();
+                return Ok("Pedido deletado com sucesso!");
             }
             catch (DbUpdateConcurrencyException ex)
             {

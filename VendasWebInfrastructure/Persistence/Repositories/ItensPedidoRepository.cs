@@ -19,15 +19,9 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             return await _dbContext.ItensPedidos.ToListAsync();
         }
 
-        public async Task<List<ItensPedido>> ListarItensPedidoEspecífico(int id)
+        public async Task<ItensPedido> ListarItensPedidoEspecífico(int id)
         {
-            var itemPedido = await _dbContext.ItensPedidos.Where(i => i.IdPedido == id).ToListAsync();
-                //ip => ip.IdPedido == id);
-            //var itemPedido = await _dbContext.ItensPedidos
-            //    .Include(ip => ip.Pedido)
-            //    .Include(ip => ip.Produto)
-            //    .FirstOrDefaultAsync(ip => ip.ItemPedidoId == id);
-            
+            var itemPedido = await _dbContext.ItensPedidos.FirstOrDefaultAsync(ip => ip.ItemPedidoId == id);
             return itemPedido;
         }
 

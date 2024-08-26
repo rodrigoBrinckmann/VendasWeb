@@ -1,8 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using VendasWebCore.Entities;
-using VendasWebCore.ViewModels;
-
-namespace VendasWebApplication.ViewModels
+﻿namespace VendasWebCore.ViewModels
 {
     public class PedidoViewModel
     {
