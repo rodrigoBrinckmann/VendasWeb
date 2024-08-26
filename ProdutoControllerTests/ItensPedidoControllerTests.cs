@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace ControllerTests
         {
             //arrange
             List<ItensPedido> listItensPedidos = new List<ItensPedido>();
-            _itensPedidoServiceMock.Setup(s => s.ListarItensPedidosAsync()).ReturnsAsync(listItensPedidos);
+            _itensPedidoServiceMock.Setup(s => s.ListarAllItensPedidosAsync()).ReturnsAsync(listItensPedidos);
             var controller = GetController();
 
             //act
@@ -100,6 +101,36 @@ namespace ControllerTests
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "ItensPedidoControllerTests - Editar ItemPedido - Exception")]
+        public async Task Put_NOK()
+        {
+            //arrange            
+            ItensPedido itensPedido = new ItensPedido() { IdPedido = 0 };            
+            _itensPedidoServiceMock.Setup(s => s.EditarItensPedidoAsync(It.IsAny<int>(), itensPedido)).ReturnsAsync(itensPedido);
+            var controller = GetController();
+
+            //act
+            var response = await controller.EditarItemPedido(1, itensPedido);
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
+        }
+
+        [Fact(DisplayName = "ItensPedidoControllerTests - Deletar ItemPedido - Exception")]
+        public async Task Delete_NOK()
+        {
+            //arrange
+            var expectedException = new DbUpdateConcurrencyException("Erro");
+            _itensPedidoServiceMock.Setup(s => s.DeletarItensPedidoAsync(It.IsAny<int>())).ThrowsAsync(expectedException);
+            var controller = GetController();
+
+            //act
+            var response = await controller.DeletarItemPedido(1);
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
         }
 
         private ItensPedidoController GetController()

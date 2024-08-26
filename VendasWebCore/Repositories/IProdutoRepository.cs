@@ -11,9 +11,9 @@ namespace VendasWebCore.Repositories
     {
         Task CadastrarProdutoAsync(Produto produto);
         Task<Produto> EditarProdutoAsync(int id, Produto produto);
-        Task DeletarProduto(int identity);        
+        Task DeletarProduto(int id);        
         Task<List<Produto>> ListarProdutos();
-        Task<Produto> ListarProdutoEspecífico(int identity);
+        Task<Produto> ListarProdutoEspecífico(int id);
         Task SaveChangesASync();
     }
 }

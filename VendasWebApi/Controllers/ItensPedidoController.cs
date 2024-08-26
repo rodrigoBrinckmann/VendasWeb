@@ -22,7 +22,7 @@ namespace VendasWebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllItensPedidoAsync()
         {            
-            return Ok(await _itensPedidoService.ListarItensPedidosAsync());
+            return Ok(await _itensPedidoService.ListarAllItensPedidosAsync());
         }
 
         

@@ -1,6 +1,7 @@
 using Azure;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Runtime.CompilerServices;
 using VendasWebApi.Controllers;
@@ -102,6 +103,38 @@ namespace ProdutoControllerTests
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "ProdutoControllerTests - Edit a product - Exception")]
+        public async Task Put_NOK()
+        {
+            //arrange            
+            Produto produto = new Produto();
+            var expectedException = new KeyNotFoundException("Erro");
+            _produtoServiceMock.Setup(s => s.EditarProdutoAsync(It.IsAny<int>(), produto)).ThrowsAsync(expectedException);
+            var controller = GetController();
+
+            //act
+            var response = await controller.EditarProduto(1, produto);
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
+        }
+
+        [Fact(DisplayName = "ProdutoControllerTests - Delete a product - Exception")]
+        public async Task Delete_NOK()
+        {
+            //arrange            
+            Produto produto = new Produto();
+            var expectedException = new DbUpdateConcurrencyException("Erro");
+            _produtoServiceMock.Setup(s => s.DeletarProdutoAsync(It.IsAny<int>())).ThrowsAsync(expectedException);
+            var controller = GetController();
+
+            //act
+            var response = await controller.DeletarProduto(1);
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
         }
 
         private ProdutoController GetController()

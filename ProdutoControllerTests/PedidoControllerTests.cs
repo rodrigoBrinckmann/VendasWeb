@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Model.Structures;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,38 @@ namespace ControllerTests
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "PedidoControllerTests - Edit an order - Exception")]
+        public async Task Put_NOK()
+        {
+            //arrange            
+            Pedido pedido = new Pedido();
+            var expectedException = new KeyNotFoundException("Erro");
+            _pedidoServiceMock.Setup(s => s.EditarPedidoAsync(It.IsAny<int>(), pedido)).ThrowsAsync(expectedException);
+            var controller = GetController();
+
+            //act
+            var response = await controller.EditarPedido(1, pedido);
+
+            //assert            
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;                  
+        }
+
+        [Fact(DisplayName = "PedidoControllerTests - Delete an order - Exception")]
+        public async Task Delete_NOK()
+        {
+            //arrange            
+            Pedido pedido = new Pedido();
+            var expectedException = new DbUpdateConcurrencyException("Erro");
+            _pedidoServiceMock.Setup(s => s.DeletarPedidoAsync(It.IsAny<int>())).ThrowsAsync(expectedException);
+            var controller = GetController();
+
+            //act
+            var response = await controller.DeletarPedido(1);
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
         }
 
         private PedidoController GetController()

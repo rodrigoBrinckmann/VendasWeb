@@ -38,7 +38,7 @@ namespace VendasWebApplication.Services
             return await _itensPedidoRepository.ListarItensPedidoEspecífico(id);
         }
 
-        public async Task<List<ItensPedido>> ListarItensPedidosAsync()
+        public async Task<List<ItensPedido>> ListarAllItensPedidosAsync()
         {
             return await _itensPedidoRepository.ListarItensPedido();
         }
