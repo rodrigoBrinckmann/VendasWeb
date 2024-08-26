@@ -5,16 +5,24 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace VendasWebCore.Entities
 {
     public class Produto
     {
-        public int Identity { get; set; }
-        [MaxLength(20)]
-        public string NomeProduto { get; set; } = string.Empty;
-        [Column(TypeName = "decimal(5, 2)")]
+        [JsonIgnore]
+        public int IdProduto { get; set; }        
+        public string NomeProduto { get; set; } = string.Empty;               
         public decimal Valor { get; set; }
-        public List<ItensPedido> ItensPedidos { get; set; }
+        [JsonIgnore]
+        public List<ItensPedido>? ItensPedidos { get; set; }
+
+
+        public void Update(Produto produto)
+        {
+            NomeProduto = produto.NomeProduto;
+            Valor = produto.Valor;            
+        }
     }
 }

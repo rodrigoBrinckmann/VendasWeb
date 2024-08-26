@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VendasWebCore.Entities;
-using VendasWebCore.Repositories;
+using VendasWebCore.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,46 +11,57 @@ namespace VendasWebApi.Controllers
     [ApiController]
     public class ProdutoController : ControllerBase
     {
-        private readonly IProdutoRepository _produtoRepository;
+        private readonly IProdutoService _produtoService;
 
-        public ProdutoController(
-            produtoRepository)
+        public ProdutoController(IProdutoService produtoService)
         {
-            _produtoRepository = produtoRepository;
+            _produtoService = produtoService;
         }
-
-        // GET: api/<ProdutoController>
+                
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+        public async Task<IActionResult> GetAllProductsAsync()
+        {         
+            return Ok(await _produtoService.ListarProdutosAsync());
         }
-
-        // GET api/<ProdutoController>/5
+                
         [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+        public async Task<IActionResult> GetProdutoByIdAsync(int id)
+        {            
+            return Ok(await _produtoService.ListarProdutoAsync(id));
         }
-
-        // POST api/<ProdutoController>
+                
         [HttpPost]
-        public void Post([FromBody] Produto produto)
+        public async Task<IActionResult> CadastrarProduto([FromBody] Produto produto)
         {
-            _produtoRepository.CadastrarProdutoASync(produto);
-            _produtoRepository.SaveChangesASync();
+            await _produtoService.CadastrarProdutoAsync(produto);            
+            return Ok("Produto Cadastrado com sucesso!");
         }
-
-        // PUT api/<ProdutoController>/5
+                
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Produto request)
         {
+            try
+            {                
+                return Ok(await _produtoService.EditarProdutoAsync(id,request));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
-        // DELETE api/<ProdutoController>/5
+                
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                await _produtoService.DeletarProdutoAsync(id);                
+                return Ok();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return BadRequest(ex.Message);                
+            }            
         }
     }
 }

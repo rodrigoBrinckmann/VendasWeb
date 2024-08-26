@@ -10,13 +10,10 @@ namespace VendasWebInfrastructure.Persistence.Configurations
         {
             //Produto
             builder
-                .HasKey(p => p.Identity);
+                .HasKey(p => p.IdProduto);
 
-            builder
-                .HasMany(p => p.ItensPedidos)
-                .WithOne()
-                .HasForeignKey(p => p.Identity)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(p => p.NomeProduto).HasMaxLength(20);
+            builder.Property(p => p.Valor).HasPrecision(10, 2);
         }
     }
 }

@@ -9,14 +9,11 @@ namespace VendasWebInfrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Pedido> builder)
         {
             builder
-            .HasKey(p => p.Identity);
+            .HasKey(p => p.IdPedido);
 
-            //Cardinalidade
-            builder
-                    .HasMany(p => p.ItensPedidos)
-                    .WithOne()
-                    .HasForeignKey(p => p.Identity)
-                    .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(p => p.NomeCliente).HasMaxLength(60);
+            builder.Property(p => p.EmailCLiente).HasMaxLength(50);
+
         }
     }
 }

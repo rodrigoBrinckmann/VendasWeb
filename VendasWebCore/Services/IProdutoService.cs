@@ -5,15 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using VendasWebCore.Entities;
 
-namespace VendasWebCore.Repositories
+namespace VendasWebCore.Services
 {
-    public interface IProdutoRepository
+    public interface IProdutoService
     {
+        Task<List<Produto>> ListarProdutosAsync();
+        Task<Produto> ListarProdutoAsync(int id);
         Task CadastrarProdutoAsync(Produto produto);
         Task<Produto> EditarProdutoAsync(int id, Produto produto);
-        Task DeletarProduto(int identity);        
-        Task<List<Produto>> ListarProdutos();
-        Task<Produto> ListarProdutoEspecífico(int identity);
-        Task SaveChangesASync();
+        Task DeletarProdutoAsync(int id);
     }
 }

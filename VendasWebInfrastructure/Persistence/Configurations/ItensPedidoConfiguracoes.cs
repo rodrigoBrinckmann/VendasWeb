@@ -9,17 +9,19 @@ namespace VendasWebInfrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<ItensPedido> builder)
         {
             builder
-                .HasKey(i => i.Identity);
+                .HasKey(i => i.ItemPedidoId);
 
             builder
                .HasOne(p => p.Pedido)
                .WithMany(p => p.ItensPedidos)
-               .HasForeignKey(p => p.IdPedido);
+               .HasForeignKey(p => p.IdPedido)
+               .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasOne(p => p.Produto)
                 .WithMany(p => p.ItensPedidos)
-                .HasForeignKey(p => p.IdProduto);
+                .HasForeignKey(p => p.IdProduto)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

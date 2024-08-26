@@ -8,12 +8,8 @@ namespace VendasWebInfrastructure.Persistence
     {
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
-
         public DbSet<ItensPedido> ItensPedidos { get; set; }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //=> options.UseSqlite("DataSource=Vendas.db;Cache=Shared");
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
