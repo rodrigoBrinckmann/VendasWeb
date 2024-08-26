@@ -41,11 +41,11 @@ namespace ServicesTests
         public async Task Cadastrar_itensPedido()
         {
             //arrange
-            ItensPedido itensPedido = new ItensPedido();
-            _itensPedidoRepositoryMock.Setup(s => s.CadastrarItensPedidoAsync(itensPedido));
+            List<ItensPedido> listaItensPedido = new List<ItensPedido>();
+            _itensPedidoRepositoryMock.Setup(s => s.CadastrarItensPedidoAsync(listaItensPedido));
             var service = GetService();
             //act
-            await service.CadastrarItensPedidoAsync(itensPedido);
+            await service.CadastrarItensPedidoAsync(listaItensPedido);
             //assert
             //no issues
         }

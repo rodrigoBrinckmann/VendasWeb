@@ -60,12 +60,12 @@ namespace ControllerTests
         public async Task Post()
         {
             //arrange            
-            ItensPedido itensPedido = new ItensPedido();
-            _itensPedidoServiceMock.Setup(s => s.CadastrarItensPedidoAsync(itensPedido));
+            List<ItensPedido> itensPedidoList = new();            
+            _itensPedidoServiceMock.Setup(s => s.CadastrarItensPedidoAsync(itensPedidoList));
             var controller = GetController();
 
             //act
-            var response = await controller.CadastrarItensPedido(itensPedido);
+            var response = await controller.CadastrarItensPedido(itensPedidoList);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;

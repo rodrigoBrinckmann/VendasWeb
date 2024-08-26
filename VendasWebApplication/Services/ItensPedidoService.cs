@@ -18,9 +18,9 @@ namespace VendasWebApplication.Services
             _itensPedidoRepository = itensPedidoRepository;
         }
 
-        public async Task CadastrarItensPedidoAsync(ItensPedido itensPedido)
+        public async Task CadastrarItensPedidoAsync(List<ItensPedido> itensPedidoList)
         {
-            await _itensPedidoRepository.CadastrarItensPedidoAsync(itensPedido);
+            await _itensPedidoRepository.CadastrarItensPedidoAsync(itensPedidoList);
         }
 
         public async Task DeletarItensPedidoAsync(int id)

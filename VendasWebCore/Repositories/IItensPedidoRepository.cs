@@ -9,7 +9,7 @@ namespace VendasWebCore.Repositories
 {
     public interface IItensPedidoRepository
     {
-        Task CadastrarItensPedidoAsync(ItensPedido produto);
+        Task CadastrarItensPedidoAsync(List<ItensPedido> produto);
         Task<ItensPedido> EditarItensPedidoAsync(int id, ItensPedido itensPedido);
         Task DeletarItensPedido(int id);
         Task<List<ItensPedido>> ListarItensPedido();

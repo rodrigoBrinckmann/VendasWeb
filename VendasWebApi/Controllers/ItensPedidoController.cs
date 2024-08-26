@@ -34,9 +34,9 @@ namespace VendasWebApi.Controllers
 
         
         [HttpPost]
-        public async Task<IActionResult> CadastrarItensPedido([FromBody] ItensPedido itensPedido)
+        public async Task<IActionResult> CadastrarItensPedido([FromBody] List<ItensPedido> itensPedidoList)
         {
-            await _itensPedidoService.CadastrarItensPedidoAsync(itensPedido);            
+            await _itensPedidoService.CadastrarItensPedidoAsync(itensPedidoList);            
             return Ok("Itens do pedido cadastrado com sucesso!");
         }
 

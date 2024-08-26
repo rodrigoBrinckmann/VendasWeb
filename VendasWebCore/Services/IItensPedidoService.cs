@@ -11,7 +11,7 @@ namespace VendasWebCore.Services
     {
         Task<List<ItensPedido>> ListarAllItensPedidosAsync();
         Task<ItensPedido> ListarItensPedidoAsync(int id);
-        Task CadastrarItensPedidoAsync(ItensPedido itensPedido);
+        Task CadastrarItensPedidoAsync(List<ItensPedido> itensPedido);
         Task<ItensPedido> EditarItensPedidoAsync(int id, ItensPedido itensPedido);
         Task DeletarItensPedidoAsync(int id);
     }

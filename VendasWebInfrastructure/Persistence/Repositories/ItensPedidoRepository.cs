@@ -25,9 +25,10 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             return itemPedido;
         }
 
-        public async Task CadastrarItensPedidoAsync(ItensPedido itensPedido)
+        public async Task CadastrarItensPedidoAsync(List<ItensPedido> itensPedidoList)
         {
-            await _dbContext.ItensPedidos.AddAsync(itensPedido);
+            foreach (var itemPedido in itensPedidoList)
+                await _dbContext.ItensPedidos.AddAsync(itemPedido);
             await SaveChangesASync();
         }
 
