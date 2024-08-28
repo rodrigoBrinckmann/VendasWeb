@@ -23,6 +23,7 @@ namespace VendasWebApi.Controllers
         /// </summary>
         /// <param name="query"></param>
         /// <remarks>
+        /// https://localhost:7277/api/Pedido
         /// https://localhost:7277/api/Pedido?query=****
         /// </remarks>
         /// <returns>

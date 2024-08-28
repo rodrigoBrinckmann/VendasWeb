@@ -24,7 +24,8 @@ namespace VendasWebApi.Controllers
         /// </summary>
         /// <param name="query"></param>
         /// <remarks>
-        /// https://localhost:7277/api/Produto?query=****
+        /// https://localhost:7277/api/Produto
+        /// https://localhost:7277/api/Produto?query=****        
         /// </remarks>
         /// <returns>
         /// O parâmetro query não é obrigatório
