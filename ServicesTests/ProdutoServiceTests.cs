@@ -30,10 +30,10 @@ namespace ServicesTests
         {
             //arrange
             List<Produto> listaProdutos = new List<Produto>();
-            _produtoRepositoryMock.Setup(s => s.ListarProdutos()).ReturnsAsync(listaProdutos);
+            _produtoRepositoryMock.Setup(s => s.ListarProdutos(It.IsAny<string>())).ReturnsAsync(listaProdutos);
             var service = GetService();
             //act
-            var result = await service.ListarProdutosAsync();
+            var result = await service.ListarProdutosAsync("Teste");
             //assert
             result.Should().NotBeNull();
         }

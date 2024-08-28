@@ -34,9 +34,9 @@ namespace VendasWebApplication.Services
             return await _pedidoRepository.ListarPedidoEspecífico(id);
         }
 
-        public async Task<List<PedidoViewModel>> ListarPedidosAsync()
-        {
-            return await _pedidoRepository.ListarPedidos();
+        public async Task<List<PedidoViewModel>> ListarPedidosAsync(string query)
+        {            
+            return await _pedidoRepository.ListarPedidos(query);
         }
     }
 }

@@ -46,11 +46,11 @@ namespace ControllerTests
         {
             //arrange
             List<PedidoViewModel> listPedidos = new List<PedidoViewModel>();            
-            _pedidoServiceMock.Setup(s => s.ListarPedidosAsync()).ReturnsAsync(listPedidos);            
+            _pedidoServiceMock.Setup(s => s.ListarPedidosAsync(It.IsAny<string>())).ReturnsAsync(listPedidos);            
             var controller = GetController();
 
             //act
-            var response = await controller.GetAllOrdersAsync();
+            var response = await controller.GetAllOrdersAsync("Name123");
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;

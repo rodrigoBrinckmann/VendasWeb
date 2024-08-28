@@ -14,7 +14,7 @@ namespace VendasWebCore.Entities
         [JsonIgnore]
         public int IdPedido { get; set; }        
         public string NomeCliente { get; set; } = string.Empty;        
-        public string EmailCLiente { get; set; } = string.Empty;
+        public string EmailCliente { get; set; } = string.Empty;
         public DateTime DataCriacao { get; set; }
         public bool Pago { get; set; }        
         public List<ItensPedido>? ItensPedidos { get; set; }
@@ -22,7 +22,7 @@ namespace VendasWebCore.Entities
         public void Update(Pedido pedido)
         {
             NomeCliente = pedido.NomeCliente;
-            EmailCLiente = pedido.EmailCLiente;
+            EmailCliente = pedido.EmailCliente;
             Pago = pedido.Pago;
         }
     }

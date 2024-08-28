@@ -66,10 +66,16 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             return produto;
         }
 
-        public async Task<List<Produto>> ListarProdutos()
+        public async Task<List<Produto>> ListarProdutos(string query)
         {
-            var produtos = await _dbContext.Produtos.ToListAsync();
-            return produtos.ToList();
+            IQueryable <Produto> produtos = _dbContext.Produtos;
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                produtos = produtos
+                    .Where(p =>
+                    p.NomeProduto.Contains(query));
+            }
+            return await produtos.ToListAsync();
         }
 
         public async Task SaveChangesASync()

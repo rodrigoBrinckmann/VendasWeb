@@ -29,10 +29,10 @@ namespace ServicesTests
         {
             //arrange
             List<PedidoViewModel> listaPedidos = new List<PedidoViewModel>();
-            _pedidoRepositoryMock.Setup(s => s.ListarPedidos()).ReturnsAsync(listaPedidos);
+            _pedidoRepositoryMock.Setup(s => s.ListarPedidos(It.IsAny<string>())).ReturnsAsync(listaPedidos);
             var service = GetService();
             //act
-            var result = await service.ListarPedidosAsync();
+            var result = await service.ListarPedidosAsync("Name123");
             //assert
             result.Should().NotBeNull();
         }

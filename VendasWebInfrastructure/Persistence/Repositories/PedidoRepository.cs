@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using VendasWebCore.Calculation;
 using VendasWebCore.Entities;
 using VendasWebCore.Repositories;
@@ -72,16 +73,12 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             }
 
             var valorTotal = Calculos.CalculaValorTotal(produtosDoPedido);
-            //decimal valorTotal = 0m;
-            //foreach (var produto in produtosDoPedido)
-            //{ 
-            //    valorTotal += (produto.Quantidade * produto.ValorUnitario);
-            //}
+            
 
             var projetoDetalhadoViewModel = new PedidoViewModel(
                 pedido.IdPedido,
                 pedido.NomeCliente,
-                pedido.EmailCLiente,
+                pedido.EmailCliente,
                 pedido.Pago,
                 valorTotal,
                 produtosDoPedido
@@ -90,13 +87,31 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             return projetoDetalhadoViewModel;
         }
 
-        public async Task<List<PedidoViewModel>> ListarPedidos()
+        public async Task<List<PedidoViewModel>> ListarPedidos(string query)
         {
             List<PedidoViewModel> todosPedidos = new();
-            var pedidos = await _dbContext.Pedidos.ToListAsync();
+            List<Pedido> pedidos = new();
+            IQueryable<Pedido> pedidosQ = _dbContext.Pedidos;
+            
+            //usar filtragem = 'like'
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                pedidosQ = pedidosQ
+                    .Where(p =>
+                    p.NomeCliente.Contains(query) ||
+                    p.EmailCliente.Contains(query)
+                    );
+                pedidos = await pedidosQ.ToListAsync();
+            }
+            else
+            {
+                pedidos = await pedidosQ.ToListAsync();
+            }
+            
             if (pedidos == null) return null;
             foreach( var pedido in pedidos )
             {
+                
                 var itensDoPedido = await _dbContext.ItensPedidos.Where(p => p.IdPedido == pedido.IdPedido).ToListAsync();
 
                 List<ProdutoViewModel> produtosDoPedido = new();
@@ -111,7 +126,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                 var projetoDetalhadoViewModel = new PedidoViewModel(
                 pedido.IdPedido,
                 pedido.NomeCliente,
-                pedido.EmailCLiente,
+                pedido.EmailCliente,
                 pedido.Pago,
                 valorTotal,
                 produtosDoPedido

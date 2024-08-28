@@ -17,11 +17,24 @@ namespace VendasWebApi.Controllers
         {
             _produtoService = produtoService;
         }
-                
+
+
+        /// <summary>
+        /// Lista todos os produtos. Pode usar um parâmetro adicional, de acordo com as instruções
+        /// </summary>
+        /// <param name="query"></param>
+        /// <remarks>
+        /// https://localhost:7277/api/Produto?query=****
+        /// </remarks>
+        /// <returns>
+        /// O parâmetro query não é obrigatório
+        /// Se usado sem o parâmetro, vai trazer todos os produtos da base de dados
+        /// Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro apareça        
+        /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllProductsAsync()
+        public async Task<IActionResult> GetAllProductsAsync(string? query)
         {         
-            return Ok(await _produtoService.ListarProdutosAsync());
+            return Ok(await _produtoService.ListarProdutosAsync(query));
         }
                 
         [HttpGet("{id}")]

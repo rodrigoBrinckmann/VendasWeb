@@ -12,7 +12,7 @@ namespace VendasWebInfrastructure.Persistence.Configurations
             .HasKey(p => p.IdPedido);
 
             builder.Property(p => p.NomeCliente).HasMaxLength(60);
-            builder.Property(p => p.EmailCLiente).HasMaxLength(50);
+            builder.Property(p => p.EmailCliente).HasMaxLength(50);
 
         }
     }

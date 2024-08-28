@@ -9,7 +9,7 @@ namespace VendasWebCore.Services
 {
     public interface IProdutoService
     {
-        Task<List<Produto>> ListarProdutosAsync();
+        Task<List<Produto>> ListarProdutosAsync(string query);
         Task<Produto> ListarProdutoAsync(int id);
         Task CadastrarProdutoAsync(Produto produto);
         Task<Produto> EditarProdutoAsync(int id, Produto produto);

@@ -39,9 +39,9 @@ namespace VendasWebApplication.Services
             return await _produtoRepository.ListarProdutoEspecífico(id);
         }
 
-        public async Task<List<Produto>> ListarProdutosAsync()
+        public async Task<List<Produto>> ListarProdutosAsync(string query)
         {
-            return await _produtoRepository.ListarProdutos();            
+            return await _produtoRepository.ListarProdutos(query);            
         }
     }
 }

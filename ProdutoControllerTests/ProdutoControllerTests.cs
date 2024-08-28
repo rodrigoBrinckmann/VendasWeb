@@ -42,11 +42,11 @@ namespace ProdutoControllerTests
         {
             //arrange
             List<Produto> listaProdutosResponse = new List<Produto>();
-            _produtoServiceMock.Setup(s => s.ListarProdutosAsync()).ReturnsAsync(listaProdutosResponse);
+            _produtoServiceMock.Setup(s => s.ListarProdutosAsync(It.IsAny<string>())).ReturnsAsync(listaProdutosResponse);
             var controller = GetController();
 
             //act
-            var response = await controller.GetAllProductsAsync();
+            var response = await controller.GetAllProductsAsync("Teste");
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;

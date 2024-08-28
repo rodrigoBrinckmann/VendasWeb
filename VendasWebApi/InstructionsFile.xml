@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VendasWebApi</name>
+    </assembly>
+    <members>
+        <member name="M:VendasWebApi.Controllers.PedidoController.GetAllOrdersAsync(System.String)">
+            <summary>
+            Lista todos os pedidos. Pode usar um parâmetro adicional, de acordo com as instruções
+            </summary>
+            <param name="query"></param>
+            <remarks>
+            https://localhost:7277/api/Pedido?query=****
+            </remarks>
+            <returns>
+            O parâmetro query não é obrigatório
+            Se usado sem o parâmetro, vai trazer todos os pedidos da base de dados
+            Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro
+            apareça ou no nome do cliente ou no email do cliente
+            </returns>
+        </member>
+        <member name="M:VendasWebApi.Controllers.ProdutoController.GetAllProductsAsync(System.String)">
+            <summary>
+            Lista todos os produtos. Pode usar um parâmetro adicional, de acordo com as instruções
+            </summary>
+            <param name="query"></param>
+            <remarks>
+            https://localhost:7277/api/Produto?query=****
+            </remarks>
+            <returns>
+            O parâmetro query não é obrigatório
+            Se usado sem o parâmetro, vai trazer todos os produtos da base de dados
+            Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro apareça        
+            </returns>
+        </member>
+    </members>
+</doc>

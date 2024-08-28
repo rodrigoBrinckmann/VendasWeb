@@ -16,11 +16,25 @@ namespace VendasWebApi.Controllers
             _pedidoService = pedidoService;
         }
 
-        
+
+
+        /// <summary>
+        /// Lista todos os pedidos. Pode usar um parâmetro adicional, de acordo com as instruções
+        /// </summary>
+        /// <param name="query"></param>
+        /// <remarks>
+        /// https://localhost:7277/api/Pedido?query=****
+        /// </remarks>
+        /// <returns>
+        /// O parâmetro query não é obrigatório
+        /// Se usado sem o parâmetro, vai trazer todos os pedidos da base de dados
+        /// Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro
+        /// apareça ou no nome do cliente ou no email do cliente
+        /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllOrdersAsync()
+        public async Task<IActionResult> GetAllOrdersAsync(string? query)
         {     
-            var listaPedidos = await _pedidoService.ListarPedidosAsync();
+            var listaPedidos = await _pedidoService.ListarPedidosAsync(query);
             return Ok(listaPedidos);
         }
 
