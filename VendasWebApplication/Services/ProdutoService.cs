@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using VendasWebCore.Entities;
+using VendasWebCore.Models;
 using VendasWebCore.Repositories;
 using VendasWebCore.Services;
 
@@ -39,9 +40,9 @@ namespace VendasWebApplication.Services
             return await _produtoRepository.ListarProdutoEspecífico(id);
         }
 
-        public async Task<List<Produto>> ListarProdutosAsync(string query)
+        public async Task<PaginationResult<Produto>> ListarProdutosAsync(string query, int page)
         {
-            return await _produtoRepository.ListarProdutos(query);            
+            return await _produtoRepository.ListarProdutos(query, page);
         }
     }
 }

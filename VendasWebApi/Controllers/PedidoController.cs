@@ -22,8 +22,10 @@ namespace VendasWebApi.Controllers
         /// Lista todos os pedidos. Pode usar um parâmetro adicional, de acordo com as instruções
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="page"></param>
         /// <remarks>
         /// https://localhost:7277/api/Pedido
+        ///
         /// https://localhost:7277/api/Pedido?query=****
         /// </remarks>
         /// <returns>
@@ -33,9 +35,9 @@ namespace VendasWebApi.Controllers
         /// apareça ou no nome do cliente ou no email do cliente
         /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllOrdersAsync(string? query)
+        public async Task<IActionResult> GetAllOrdersAsync(string? query, int page = 1)
         {     
-            var listaPedidos = await _pedidoService.ListarPedidosAsync(query);
+            var listaPedidos = await _pedidoService.ListarPedidosAsync(query, page);
             return Ok(listaPedidos);
         }
 

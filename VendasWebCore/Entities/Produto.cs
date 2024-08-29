@@ -12,10 +12,10 @@ namespace VendasWebCore.Entities
     public class Produto
     {
         [JsonIgnore]
-        public int IdProduto { get; set; }        
-        public string NomeProduto { get; set; } = string.Empty;               
-        public decimal Valor { get; set; }        
-        public List<ItensPedido>? ItensPedidos { get; set; }
+        public int IdProduto { get; set; }
+        public string NomeProduto { get; private set; } = string.Empty;
+        public decimal Valor { get; private set; }
+        public List<ItensPedido>? ItensPedidos { get; private set; }
 
 
         public void Update(Produto produto)

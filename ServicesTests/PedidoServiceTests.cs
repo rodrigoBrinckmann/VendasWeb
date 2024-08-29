@@ -2,6 +2,7 @@
 using Moq;
 using VendasWebApplication.Services;
 using VendasWebCore.Entities;
+using VendasWebCore.Models;
 using VendasWebCore.Repositories;
 using VendasWebCore.ViewModels;
 
@@ -28,11 +29,11 @@ namespace ServicesTests
         public async Task Listar_todos_pedidos()
         {
             //arrange
-            List<PedidoViewModel> listaPedidos = new List<PedidoViewModel>();
-            _pedidoRepositoryMock.Setup(s => s.ListarPedidos(It.IsAny<string>())).ReturnsAsync(listaPedidos);
+            PaginationResult<PedidoViewModel> listaPedidos = new PaginationResult<PedidoViewModel>();
+            _pedidoRepositoryMock.Setup(s => s.ListarPedidos(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(listaPedidos);
             var service = GetService();
             //act
-            var result = await service.ListarPedidosAsync("Name123");
+            var result = await service.ListarPedidosAsync("Name123",5);
             //assert
             result.Should().NotBeNull();
         }

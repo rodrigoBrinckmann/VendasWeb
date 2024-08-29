@@ -9,16 +9,36 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Principal;
 using Azure.Core;
+using VendasWebCore.Models;
 
 namespace VendasWebInfrastructure.Persistence.Repositories
 {
     public class ProdutoRepository : IProdutoRepository
     {
-        private readonly VendasWebDbContext _dbContext;        
+        private readonly VendasWebDbContext _dbContext;
+        private const int PAGE_SIZE = 2;
 
         public ProdutoRepository(VendasWebDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;            
+        }
+
+        public async Task<PaginationResult<Produto>> ListarProdutos(string query, int page)
+        {
+            IQueryable<Produto> produtos = _dbContext.Produtos;
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                produtos = produtos
+                    .Where(p =>
+                    p.NomeProduto.Contains(query));
+            }
+            return await produtos.GetPaged<Produto>(page, PAGE_SIZE);
+        }
+
+        public async Task<Produto> ListarProdutoEspecífico(int identity)
+        {
+            var produto = await _dbContext.Produtos.SingleOrDefaultAsync(p => p.IdProduto == identity);
+            return produto;
         }
 
         public async Task CadastrarProdutoAsync(Produto produto)
@@ -60,23 +80,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             return produto;
         }
 
-        public async Task<Produto> ListarProdutoEspecífico(int identity)
-        {            
-            var produto = await _dbContext.Produtos.SingleOrDefaultAsync(p => p.IdProduto == identity);
-            return produto;
-        }
-
-        public async Task<List<Produto>> ListarProdutos(string query)
-        {
-            IQueryable <Produto> produtos = _dbContext.Produtos;
-            if (!string.IsNullOrWhiteSpace(query))
-            {
-                produtos = produtos
-                    .Where(p =>
-                    p.NomeProduto.Contains(query));
-            }
-            return await produtos.ToListAsync();
-        }
+               
 
         public async Task SaveChangesASync()
         {

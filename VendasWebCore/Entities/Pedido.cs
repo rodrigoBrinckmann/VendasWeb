@@ -13,10 +13,10 @@ namespace VendasWebCore.Entities
     {
         [JsonIgnore]
         public int IdPedido { get; set; }        
-        public string NomeCliente { get; set; } = string.Empty;        
-        public string EmailCliente { get; set; } = string.Empty;
-        public DateTime DataCriacao { get; set; }
-        public bool Pago { get; set; }        
+        public string NomeCliente { get; private set; } = string.Empty;        
+        public string EmailCliente { get; private set; } = string.Empty;
+        public DateTime DataCriacao { get; private set; }
+        public bool Pago { get; private set; }
         public List<ItensPedido>? ItensPedidos { get; set; }
 
         public void Update(Pedido pedido)

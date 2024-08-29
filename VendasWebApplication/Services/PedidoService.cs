@@ -1,4 +1,5 @@
 ﻿using VendasWebCore.Entities;
+using VendasWebCore.Models;
 using VendasWebCore.Repositories;
 using VendasWebCore.Services;
 using VendasWebCore.ViewModels;
@@ -34,9 +35,9 @@ namespace VendasWebApplication.Services
             return await _pedidoRepository.ListarPedidoEspecífico(id);
         }
 
-        public async Task<List<PedidoViewModel>> ListarPedidosAsync(string query)
+        public async Task<PaginationResult<PedidoViewModel>> ListarPedidosAsync(string query, int page)
         {            
-            return await _pedidoRepository.ListarPedidos(query);
+            return await _pedidoRepository.ListarPedidos(query, page);
         }
     }
 }

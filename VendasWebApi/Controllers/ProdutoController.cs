@@ -33,9 +33,9 @@ namespace VendasWebApi.Controllers
         /// Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro apareça        
         /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllProductsAsync(string? query)
+        public async Task<IActionResult> GetAllProductsAsync(string? query, int page = 1)
         {         
-            return Ok(await _produtoService.ListarProdutosAsync(query));
+            return Ok(await _produtoService.ListarProdutosAsync(query, page));
         }
                 
         [HttpGet("{id}")]

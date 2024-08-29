@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VendasWebApi.Controllers;
 using VendasWebCore.Entities;
+using VendasWebCore.Models;
 using VendasWebCore.Services;
 using VendasWebCore.ViewModels;
 
@@ -45,8 +46,8 @@ namespace ControllerTests
         public async Task Get_All()
         {
             //arrange
-            List<PedidoViewModel> listPedidos = new List<PedidoViewModel>();            
-            _pedidoServiceMock.Setup(s => s.ListarPedidosAsync(It.IsAny<string>())).ReturnsAsync(listPedidos);            
+            PaginationResult<PedidoViewModel> listPedidos = new PaginationResult<PedidoViewModel>();            
+            _pedidoServiceMock.Setup(s => s.ListarPedidosAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(listPedidos);            
             var controller = GetController();
 
             //act

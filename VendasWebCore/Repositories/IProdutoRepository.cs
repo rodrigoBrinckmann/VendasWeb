@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VendasWebCore.Entities;
+﻿using VendasWebCore.Entities;
+using VendasWebCore.Models;
 
 namespace VendasWebCore.Repositories
 {
     public interface IProdutoRepository
     {
+        Task<PaginationResult<Produto>> ListarProdutos(string query, int page);
+        Task<Produto> ListarProdutoEspecífico(int id);
         Task CadastrarProdutoAsync(Produto produto);
         Task<Produto> EditarProdutoAsync(int id, Produto produto);
         Task DeletarProduto(int id);        
-        Task<List<Produto>> ListarProdutos(string query);
-        Task<Produto> ListarProdutoEspecífico(int id);
         Task SaveChangesASync();
     }
 }

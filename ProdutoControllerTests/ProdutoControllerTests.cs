@@ -6,6 +6,7 @@ using Moq;
 using System.Runtime.CompilerServices;
 using VendasWebApi.Controllers;
 using VendasWebCore.Entities;
+using VendasWebCore.Models;
 using VendasWebCore.Services;
 using Xunit;
 
@@ -41,8 +42,8 @@ namespace ProdutoControllerTests
         public async Task Get_All()
         {
             //arrange
-            List<Produto> listaProdutosResponse = new List<Produto>();
-            _produtoServiceMock.Setup(s => s.ListarProdutosAsync(It.IsAny<string>())).ReturnsAsync(listaProdutosResponse);
+            PaginationResult<Produto> listaProdutosResponse = new PaginationResult<Produto>();
+            _produtoServiceMock.Setup(s => s.ListarProdutosAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(listaProdutosResponse);
             var controller = GetController();
 
             //act

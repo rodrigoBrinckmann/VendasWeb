@@ -4,23 +4,25 @@
         <name>VendasWebApi</name>
     </assembly>
     <members>
-        <member name="M:VendasWebApi.Controllers.PedidoController.GetAllOrdersAsync(System.String)">
-            <summary>
-            Lista todos os pedidos. Pode usar um parâmetro adicional, de acordo com as instruções
-            </summary>
-            <param name="query"></param>
-            <remarks>
-            https://localhost:7277/api/Pedido
-            https://localhost:7277/api/Pedido?query=****
-            </remarks>
-            <returns>
-            O parâmetro query não é obrigatório
-            Se usado sem o parâmetro, vai trazer todos os pedidos da base de dados
-            Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro
-            apareça ou no nome do cliente ou no email do cliente
-            </returns>
+        <member name="M:VendasWebApi.Controllers.PedidoController.GetAllOrdersAsync(System.String,System.Int32)">
+             <summary>
+             Lista todos os pedidos. Pode usar um parâmetro adicional, de acordo com as instruções
+             </summary>
+             <param name="query"></param>
+             <param name="page"></param>
+             <remarks>
+             https://localhost:7277/api/Pedido
+            
+             https://localhost:7277/api/Pedido?query=****
+             </remarks>
+             <returns>
+             O parâmetro query não é obrigatório
+             Se usado sem o parâmetro, vai trazer todos os pedidos da base de dados
+             Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro
+             apareça ou no nome do cliente ou no email do cliente
+             </returns>
         </member>
-        <member name="M:VendasWebApi.Controllers.ProdutoController.GetAllProductsAsync(System.String)">
+        <member name="M:VendasWebApi.Controllers.ProdutoController.GetAllProductsAsync(System.String,System.Int32)">
             <summary>
             Lista todos os produtos. Pode usar um parâmetro adicional, de acordo com as instruções
             </summary>

@@ -3,6 +3,7 @@ using Moq;
 using System.Collections.Generic;
 using VendasWebApplication.Services;
 using VendasWebCore.Entities;
+using VendasWebCore.Models;
 using VendasWebCore.Repositories;
 
 namespace ServicesTests
@@ -29,11 +30,11 @@ namespace ServicesTests
         public async Task Listar_todos_produtos()
         {
             //arrange
-            List<Produto> listaProdutos = new List<Produto>();
-            _produtoRepositoryMock.Setup(s => s.ListarProdutos(It.IsAny<string>())).ReturnsAsync(listaProdutos);
+            PaginationResult<Produto> listaProdutos = new PaginationResult<Produto>();
+            _produtoRepositoryMock.Setup(s => s.ListarProdutos(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(listaProdutos);
             var service = GetService();
             //act
-            var result = await service.ListarProdutosAsync("Teste");
+            var result = await service.ListarProdutosAsync("Teste", 5);
             //assert
             result.Should().NotBeNull();
         }
