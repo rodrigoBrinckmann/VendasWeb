@@ -1,5 +1,6 @@
 ﻿using VendasWebCore.Entities;
 using VendasWebCore.Models;
+using VendasWebCore.ViewModels;
 
 namespace VendasWebCore.Repositories
 {

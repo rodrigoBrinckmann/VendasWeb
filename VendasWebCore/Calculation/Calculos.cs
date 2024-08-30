@@ -9,7 +9,7 @@ namespace VendasWebCore.Calculation
 {
     public static class Calculos
     {
-        public static decimal CalculaValorTotal(List<ProdutoViewModel> produtoList)
+        public static decimal CalculaValorTotal(List<ProdutoPedidoViewModel> produtoList)
         {
             decimal valorTotal = 0m;
             foreach (var produto in produtoList)

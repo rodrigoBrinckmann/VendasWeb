@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Principal;
 using Azure.Core;
 using VendasWebCore.Models;
+using VendasWebCore.ViewModels;
 
 namespace VendasWebInfrastructure.Persistence.Repositories
 {
@@ -32,14 +33,29 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                     .Where(p =>
                     p.NomeProduto.Contains(query));
             }
+
             return await produtos.GetPaged<Produto>(page, PAGE_SIZE);
         }
 
-        public async Task<Produto> ListarProdutoEspecífico(int identity)
+        public async Task<Produto> ListarProdutoEspecífico(int id)
         {
-            var produto = await _dbContext.Produtos                
-                .SingleOrDefaultAsync(p => p.IdProduto == identity);
-            return produto;
+            try
+            {
+                var produto = await _dbContext.Produtos
+                    .SingleOrDefaultAsync(p => p.IdProduto == id);
+                if (produto is not null)
+                {
+                    return produto;
+                }
+                else
+                {
+                    throw new KeyNotFoundException();
+                }
+            }
+            catch (KeyNotFoundException ex)
+            {
+                throw new KeyNotFoundException("Produto não existente no banco de dados", ex);
+            }
         }
 
         public async Task CadastrarProdutoAsync(Produto produto)

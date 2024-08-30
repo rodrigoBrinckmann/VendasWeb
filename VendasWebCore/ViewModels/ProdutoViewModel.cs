@@ -8,19 +8,19 @@ namespace VendasWebCore.ViewModels
 {
     public class ProdutoViewModel
     {
-        public int IdPedido { get; set; }
-        public int IdProduto { get; set; }
-        public string NomeProduto { get; set;}
+        public int Id { get; set; }
+        public string NomeProduto { get; set; }
         public decimal ValorUnitario { get; set; }
-        public int Quantidade { get; set; }
 
-        public ProdutoViewModel(int idPedido, int idProduto, string nomeProduto, decimal valorUnitario, int quantidade)
+        public ProdutoViewModel()
         {
-            IdPedido = idPedido;
-            IdProduto = idProduto;
+            
+        }
+        public ProdutoViewModel(int id, string nomeProduto, decimal valorUnitario)
+        {
+            Id = id;
             NomeProduto = nomeProduto;
             ValorUnitario = valorUnitario;
-            Quantidade = quantidade;
         }
     }
 }

@@ -8,21 +8,22 @@ using System.Threading.Tasks;
 using VendasWebApplication.Commands.CreateProduto;
 using VendasWebApplication.Commands.DeletarProduto;
 using VendasWebApplication.Commands.UpdateProduto;
+using VendasWebApplication.Queries.GetAllProdutos;
+using VendasWebApplication.Queries.GetProdutoById;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
 using VendasWebCore.Repositories;
+using VendasWebCore.ViewModels;
 
 namespace VendasWebApplication.Services.ProdutoServices
 {
     public class ProdutoService : IProdutoService
-    {
-        private readonly IProdutoRepository _produtoRepository;
+    {        
         private readonly IMediator _mediator;
 
-        public ProdutoService(IProdutoRepository produtoRepository, IMediator mediator)
+        public ProdutoService(IMediator mediator)
         {
-            _mediator = mediator;
-            _produtoRepository = produtoRepository;
+            _mediator = mediator;            
         }
 
         public async Task CadastrarProdutoAsync(CreateProdutoCommand produto)
@@ -40,14 +41,14 @@ namespace VendasWebApplication.Services.ProdutoServices
             await _mediator.Send(produto);            
         }
 
-        public async Task<Produto> ListarProdutoAsync(int id)
+        public async Task<ProdutoViewModel> ListarProdutoAsync(GetProdutoByIdQuery query)
         {
-            return await _produtoRepository.ListarProdutoEspecífico(id);
+            return await _mediator.Send(query);            
         }
 
-        public async Task<PaginationResult<Produto>> ListarProdutosAsync(string query, int page)
+        public async Task<PaginationResult<ProdutoViewModel>> ListarProdutosAsync(GetAllProdutosQuery produtosQuery)
         {
-            return await _produtoRepository.ListarProdutos(query, page);
+            return await _mediator.Send(produtosQuery);            
         }
     }
 }

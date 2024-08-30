@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using VendasWebApplication.Commands.CreateProduto;
 using VendasWebApplication.Commands.DeletarProduto;
 using VendasWebApplication.Commands.UpdateProduto;
+using VendasWebApplication.Queries.GetAllProdutos;
+using VendasWebApplication.Queries.GetProdutoById;
 using VendasWebApplication.Services.ProdutoServices;
 using VendasWebCore.Entities;
 
@@ -24,26 +26,36 @@ namespace VendasWebApi.Controllers
         /// <summary>
         /// Lista todos os produtos. Pode usar um parâmetro adicional, de acordo com as instruções
         /// </summary>
-        /// <param name="query"></param>
+        /// <param name="getAllProductsQuery"></param>
         /// <remarks>
         /// https://localhost:7277/api/Produto
+        /// 
         /// https://localhost:7277/api/Produto?query=****        
         /// </remarks>
         /// <returns>
-        /// O parâmetro query não é obrigatório
+        /// O parâmetro query e o page não são obrigatórios
         /// Se usado sem o parâmetro, vai trazer todos os produtos da base de dados
-        /// Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro apareça        
-        /// </returns>
+        /// Se colocado o parâmetro query, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro apareça        
+        /// Se colocado o parâmetro page, ele trará a pagina correspondente a consulta, no caso de haver mais de uma página
+        /// </returns>        
         [HttpGet]
-        public async Task<IActionResult> GetAllProductsAsync(string? query, int page = 1)
-        {         
-            return Ok(await _produtoService.ListarProdutosAsync(query, page));
+        public async Task<IActionResult> GetAllProductsAsync([FromQuery] GetAllProdutosQuery getAllProductsQuery)
+        {
+            return Ok(await _produtoService.ListarProdutosAsync(getAllProductsQuery));
         }
                 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProdutoByIdAsync(int id)
-        {            
-            return Ok(await _produtoService.ListarProdutoAsync(id));
+        [HttpGet]
+        [Route("produtoEspecifico")]
+        public async Task<IActionResult> GetProdutoByIdAsync([FromQuery] GetProdutoByIdQuery query)
+        {
+            try
+            {
+                return Ok(await _produtoService.ListarProdutoAsync(query));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
                 
         [HttpPost]

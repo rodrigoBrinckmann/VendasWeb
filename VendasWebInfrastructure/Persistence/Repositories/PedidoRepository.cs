@@ -47,11 +47,11 @@ namespace VendasWebInfrastructure.Persistence.Repositories
 
                 var itensDoPedido = await _dbContext.ItensPedidos.Where(p => p.IdPedido == pedido.IdPedido).ToListAsync();
 
-                List<ProdutoViewModel> produtosDoPedido = new();
+                List<ProdutoPedidoViewModel> produtosDoPedido = new();
                 foreach (var item in itensDoPedido)
                 {
                     var produtoDoPedido = await _dbContext.Produtos.SingleOrDefaultAsync(p => p.IdProduto == item.IdProduto);
-                    var produto = new ProdutoViewModel(item.IdPedido, produtoDoPedido.IdProduto, produtoDoPedido.NomeProduto, produtoDoPedido.Valor, item.Quantidade);
+                    var produto = new ProdutoPedidoViewModel(item.IdPedido, produtoDoPedido.IdProduto, produtoDoPedido.NomeProduto, produtoDoPedido.Valor, item.Quantidade);
                     produtosDoPedido.Add(produto);
                 }
                 var valorTotal = Calculos.CalculaValorTotal(produtosDoPedido);
@@ -87,11 +87,11 @@ namespace VendasWebInfrastructure.Persistence.Repositories
 
             var itensDoPedido = await _dbContext.ItensPedidos.Where(p => p.IdPedido == idPedido).ToListAsync();
 
-            List<ProdutoViewModel> produtosDoPedido = new();
+            List<ProdutoPedidoViewModel> produtosDoPedido = new();
             foreach (var item in itensDoPedido)
             {
                 var produtoDoPedido = await _dbContext.Produtos.SingleOrDefaultAsync(p => p.IdProduto == item.IdProduto);
-                var produto = new ProdutoViewModel(item.IdPedido, produtoDoPedido.IdProduto, produtoDoPedido.NomeProduto, produtoDoPedido.Valor, item.Quantidade);
+                var produto = new ProdutoPedidoViewModel(item.IdPedido, produtoDoPedido.IdProduto, produtoDoPedido.NomeProduto, produtoDoPedido.Valor, item.Quantidade);
                 produtosDoPedido.Add(produto);
             }
 

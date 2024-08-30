@@ -8,9 +8,12 @@ using VendasWebApi.Controllers;
 using VendasWebApplication.Commands.CreateProduto;
 using VendasWebApplication.Commands.DeletarProduto;
 using VendasWebApplication.Commands.UpdateProduto;
+using VendasWebApplication.Queries.GetAllProdutos;
+using VendasWebApplication.Queries.GetProdutoById;
 using VendasWebApplication.Services.ProdutoServices;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
+using VendasWebCore.ViewModels;
 using Xunit;
 
 
@@ -29,12 +32,13 @@ namespace ProdutoControllerTests
         public async Task Get_ById()
         {
             //arrange            
-            Produto responseProduto = new Produto();            
-            _produtoServiceMock.Setup(s => s.ListarProdutoAsync(It.IsAny<int>())).ReturnsAsync(responseProduto);
+            ProdutoViewModel responseProduto = new ProdutoViewModel();
+            GetProdutoByIdQuery getProdutoByIdQuery = new GetProdutoByIdQuery();
+            _produtoServiceMock.Setup(s => s.ListarProdutoAsync(It.IsAny<GetProdutoByIdQuery>())).ReturnsAsync(responseProduto);
             var controller = GetController();
             
             //act
-            var response = await controller.GetProdutoByIdAsync(1);
+            var response = await controller.GetProdutoByIdAsync(getProdutoByIdQuery);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
@@ -45,12 +49,13 @@ namespace ProdutoControllerTests
         public async Task Get_All()
         {
             //arrange
-            PaginationResult<Produto> listaProdutosResponse = new PaginationResult<Produto>();
-            _produtoServiceMock.Setup(s => s.ListarProdutosAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(listaProdutosResponse);
+            PaginationResult<ProdutoViewModel> listaProdutosResponse = new PaginationResult<ProdutoViewModel>();
+            GetAllProdutosQuery getAllProdutosQuery = new GetAllProdutosQuery();
+            _produtoServiceMock.Setup(s => s.ListarProdutosAsync(It.IsAny<GetAllProdutosQuery>())).ReturnsAsync(listaProdutosResponse);
             var controller = GetController();
 
             //act
-            var response = await controller.GetAllProductsAsync("Teste");
+            var response = await controller.GetAllProductsAsync(getAllProdutosQuery);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;

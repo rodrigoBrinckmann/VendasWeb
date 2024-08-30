@@ -16,7 +16,7 @@ namespace ServicesTests
         public async Task Listar_pedido_específico()
         {
             //arrange
-            PedidoViewModel pedido = new PedidoViewModel(10,"TesteCliente","email@email.com",true,10m,new List<ProdutoViewModel>() { new ProdutoViewModel(1, 10, "Produto 123", 10m, 5) });
+            PedidoViewModel pedido = new PedidoViewModel(10,"TesteCliente","email@email.com",true,10m,new List<ProdutoPedidoViewModel>() { new ProdutoPedidoViewModel(1, 10, "Produto 123", 10m, 5) });
             _pedidoRepositoryMock.Setup(s => s.ListarPedidoEspecífico(It.IsAny<int>())).ReturnsAsync(pedido);
             var service = GetService();
             //act

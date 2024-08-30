@@ -24,7 +24,7 @@ namespace ControllerTests
         public async Task Get_ById()
         {
             //arrange            
-            PedidoViewModel responsePedido = new PedidoViewModel(1,"Teste","email@email.com",true,10m,new List<ProdutoViewModel>());
+            PedidoViewModel responsePedido = new PedidoViewModel(1,"Teste","email@email.com",true,10m,new List<ProdutoPedidoViewModel>());
             _pedidoServiceMock.Setup(s => s.ListarPedidoAsync(It.IsAny<int>())).ReturnsAsync(responsePedido);
             var controller = GetController();
 
