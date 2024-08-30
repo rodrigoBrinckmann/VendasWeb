@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using VendasWebApplication.Commands.CreateProduto;
+using VendasWebApplication.Commands.DeletarProduto;
+using VendasWebApplication.Commands.UpdateProduto;
+using VendasWebApplication.Services.ProdutoServices;
 using VendasWebCore.Entities;
-using VendasWebCore.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,7 +20,6 @@ namespace VendasWebApi.Controllers
         {
             _produtoService = produtoService;
         }
-
 
         /// <summary>
         /// Lista todos os produtos. Pode usar um parâmetro adicional, de acordo com as instruções
@@ -45,18 +47,19 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpPost]
-        public async Task<IActionResult> CadastrarProduto([FromBody] Produto produto)
+        public async Task<IActionResult> CadastrarProduto(CreateProdutoCommand request)
         {
-            await _produtoService.CadastrarProdutoAsync(produto);            
+            await _produtoService.CadastrarProdutoAsync(request);            
             return Ok("Produto Cadastrado com sucesso!");
         }
                 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditarProduto(int id, [FromBody] Produto request)
+        [HttpPut]
+        public async Task<IActionResult> EditarProduto(UpdateProdutoCommand request)
         {
             try
-            {                
-                return Ok(await _produtoService.EditarProdutoAsync(id,request));
+            {
+                await _produtoService.EditarProdutoAsync(request);
+                return Ok("Produto editado com sucesso");
             }
             catch (KeyNotFoundException ex)
             {
@@ -65,11 +68,11 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletarProduto(int id)
+        public async Task<IActionResult> DeletarProduto(DeleteProdutoCommand request)
         {
             try
             {
-                await _produtoService.DeletarProdutoAsync(id);
+                await _produtoService.DeletarProdutoAsync(request);
                 return Ok("Produto deletado da base de dados");
             }
             catch (DbUpdateConcurrencyException ex)

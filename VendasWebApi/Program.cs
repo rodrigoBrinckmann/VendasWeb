@@ -4,6 +4,8 @@ using VendasWebCore.Services;
 using VendasWebApplication.Services;
 using VendasWebInfrastructure.Persistence;
 using VendasWebInfrastructure.Persistence.Repositories;
+using VendasWebApplication.Services.ProdutoServices;
+using VendasWebApplication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +20,9 @@ builder.Services.AddDbContext<VendasWebDbContext>
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IItensPedidoRepository, ItensPedidoRepository>();
-builder.Services.AddScoped<IPedidoService, PedidoService>();
-builder.Services.AddScoped<IProdutoService, ProdutoService>();
-builder.Services.AddScoped<IItensPedidoService, ItensPedidoService>();
+
+builder.Services.AddApplication();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo

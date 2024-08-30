@@ -1,7 +1,11 @@
 using FluentAssertions;
+using MediatR;
 using Moq;
 using System.Collections.Generic;
-using VendasWebApplication.Services;
+using VendasWebApplication.Commands.CreateProduto;
+using VendasWebApplication.Commands.DeletarProduto;
+using VendasWebApplication.Commands.UpdateProduto;
+using VendasWebApplication.Services.ProdutoServices;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
 using VendasWebCore.Repositories;
@@ -12,6 +16,7 @@ namespace ServicesTests
     {
 
         private readonly Mock<IProdutoRepository> _produtoRepositoryMock = new();
+        private readonly Mock<IMediator> _mediatrMock = new();
 
         [Fact(DisplayName = "ProdutoServiceTests - Listar produto específico")]
         public async Task Listar_produto_específico()
@@ -43,11 +48,12 @@ namespace ServicesTests
         public async Task Cadastrar_produto()
         {
             //arrange
+            CreateProdutoCommand produtoCommand = new CreateProdutoCommand("Produto x", 15m);
             Produto produto = new Produto();
             _produtoRepositoryMock.Setup(s => s.CadastrarProdutoAsync(produto));
             var service = GetService();
             //act
-            await service.CadastrarProdutoAsync(produto);
+            await service.CadastrarProdutoAsync(produtoCommand);
             //assert
             //no issues
         }
@@ -56,10 +62,11 @@ namespace ServicesTests
         public async Task Deletar_produto()
         {
             //arrange            
+            DeleteProdutoCommand produtoCommand = new DeleteProdutoCommand(1);
             _produtoRepositoryMock.Setup(s => s.DeletarProduto(1));
             var service = GetService();
             //act
-            await service.DeletarProdutoAsync(1);
+            await service.DeletarProdutoAsync(produtoCommand);
             //assert
             //no issues
         }
@@ -67,19 +74,20 @@ namespace ServicesTests
         [Fact(DisplayName = "ProdutoServiceTests - Editar Produto")]
         public async Task Editar_produto()
         {
-            //arrange            
+            //arrange
+            UpdateProdutoCommand produtoCommand = new UpdateProdutoCommand(1,"Produto x", 15m);
             Produto produto = new Produto();
             _produtoRepositoryMock.Setup(s => s.EditarProdutoAsync(1, produto));
             var service = GetService();
             //act
-            await service.EditarProdutoAsync(1,produto);
+            await service.EditarProdutoAsync(produtoCommand);
             //assert
             //no issues
         }
 
         private ProdutoService GetService()
         {
-            var service = new ProdutoService(_produtoRepositoryMock.Object);
+            var service = new ProdutoService(_produtoRepositoryMock.Object, _mediatrMock.Object);
             return service;
         }
     }

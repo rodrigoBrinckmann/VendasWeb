@@ -5,9 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Runtime.CompilerServices;
 using VendasWebApi.Controllers;
+using VendasWebApplication.Commands.CreateProduto;
+using VendasWebApplication.Commands.DeletarProduto;
+using VendasWebApplication.Commands.UpdateProduto;
+using VendasWebApplication.Services.ProdutoServices;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
-using VendasWebCore.Services;
 using Xunit;
 
 
@@ -62,7 +65,7 @@ namespace ProdutoControllerTests
         public async Task Post()
         {
             //arrange            
-            Produto produto = new Produto();
+            CreateProdutoCommand produto = new CreateProdutoCommand("Produto1", 10m);
             _produtoServiceMock.Setup(s => s.CadastrarProdutoAsync(produto));
             var controller = GetController();
 
@@ -78,12 +81,12 @@ namespace ProdutoControllerTests
         public async Task Put()
         {
             //arrange            
-            Produto produto = new Produto();
-            _produtoServiceMock.Setup(s => s.EditarProdutoAsync(It.IsAny<int>(),produto)).ReturnsAsync(produto);
+            UpdateProdutoCommand produto = new UpdateProdutoCommand(1,"Produto1",10m);
+            _produtoServiceMock.Setup(s => s.EditarProdutoAsync(It.IsAny<UpdateProdutoCommand>()));
             var controller = GetController();
 
             //act
-            var response = await controller.EditarProduto(1,produto);
+            var response = await controller.EditarProduto(produto);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
@@ -94,12 +97,12 @@ namespace ProdutoControllerTests
         public async Task Delete()
         {
             //arrange            
-            Produto produto = new Produto();
-            _produtoServiceMock.Setup(s => s.DeletarProdutoAsync(It.IsAny<int>()));
+            DeleteProdutoCommand produto = new DeleteProdutoCommand(1);
+            _produtoServiceMock.Setup(s => s.DeletarProdutoAsync(It.IsAny<DeleteProdutoCommand>()));
             var controller = GetController();
 
             //act
-            var response = await controller.DeletarProduto(1);
+            var response = await controller.DeletarProduto(produto);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
@@ -110,13 +113,13 @@ namespace ProdutoControllerTests
         public async Task Put_NOK()
         {
             //arrange            
-            Produto produto = new Produto();
+            UpdateProdutoCommand produto = new UpdateProdutoCommand(1,"Produto X", 7m);
             var expectedException = new KeyNotFoundException("Erro");
-            _produtoServiceMock.Setup(s => s.EditarProdutoAsync(It.IsAny<int>(), produto)).ThrowsAsync(expectedException);
+            _produtoServiceMock.Setup(s => s.EditarProdutoAsync(It.IsAny<UpdateProdutoCommand>())).ThrowsAsync(expectedException);
             var controller = GetController();
 
             //act
-            var response = await controller.EditarProduto(1, produto);
+            var response = await controller.EditarProduto(produto);
 
             //assert
             var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
@@ -126,13 +129,13 @@ namespace ProdutoControllerTests
         public async Task Delete_NOK()
         {
             //arrange            
-            Produto produto = new Produto();
+            DeleteProdutoCommand produto = new DeleteProdutoCommand(1);
             var expectedException = new DbUpdateConcurrencyException("Erro");
-            _produtoServiceMock.Setup(s => s.DeletarProdutoAsync(It.IsAny<int>())).ThrowsAsync(expectedException);
+            _produtoServiceMock.Setup(s => s.DeletarProdutoAsync(It.IsAny<DeleteProdutoCommand>())).ThrowsAsync(expectedException);
             var controller = GetController();
 
             //act
-            var response = await controller.DeletarProduto(1);
+            var response = await controller.DeletarProduto(produto);
 
             //assert
             var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;

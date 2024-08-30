@@ -37,7 +37,8 @@ namespace VendasWebInfrastructure.Persistence.Repositories
 
         public async Task<Produto> ListarProdutoEspecífico(int identity)
         {
-            var produto = await _dbContext.Produtos.SingleOrDefaultAsync(p => p.IdProduto == identity);
+            var produto = await _dbContext.Produtos                
+                .SingleOrDefaultAsync(p => p.IdProduto == identity);
             return produto;
         }
 
@@ -61,7 +62,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             }
         }
 
-        public async Task<Produto> EditarProdutoAsync(int id, Produto produto)
+        public async Task EditarProdutoAsync(int id, Produto produto)
         {
             try
             {
@@ -70,18 +71,18 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                 {
                     produtoFinal.Update(produto);
                     await SaveChangesASync();
-                    return produtoFinal;
+                }
+                else
+                {
+                    throw new KeyNotFoundException();
                 }
             }
             catch (KeyNotFoundException e)
             {
                 throw new KeyNotFoundException("Produto não existente no banco de dados - Não atualizado", e);
             }
-            return produto;
         }
-
-               
-
+        
         public async Task SaveChangesASync()
         {
             await _dbContext.SaveChangesAsync();
