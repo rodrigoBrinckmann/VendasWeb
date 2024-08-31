@@ -4,18 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VendasWebCore.Entities;
 
-namespace VendasWebApplication.Commands.UpdateProduto
+namespace VendasWebApplication.Commands.ProdutoCommands.CriarProduto
 {
-    public class UpdateProdutoCommand : IRequest<Unit>
-    {        
-        public int Id { get; private set; }
+    public class CreateProdutoCommand : IRequest<Unit>
+    {
         public string NomeProduto { get; private set; } = string.Empty;
         public decimal Valor { get; private set; }
 
-        public UpdateProdutoCommand(int id, string nomeProduto, decimal valor)
+        public CreateProdutoCommand(string nomeProduto, decimal valor)
         {
-            Id = id;
             NomeProduto = nomeProduto;
             Valor = valor;
         }

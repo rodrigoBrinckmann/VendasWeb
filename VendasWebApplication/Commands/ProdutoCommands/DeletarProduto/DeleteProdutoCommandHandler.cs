@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VendasWebCore.Repositories;
 
-namespace VendasWebApplication.Commands.DeletarProduto
+namespace VendasWebApplication.Commands.ProdutoCommands.DeletarProduto
 {
     public class DeleteProdutoCommandHandler : IRequestHandler<DeleteProdutoCommand, Unit>
     {

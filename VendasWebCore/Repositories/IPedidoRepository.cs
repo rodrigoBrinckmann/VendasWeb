@@ -10,6 +10,7 @@ namespace VendasWebCore.Repositories
         Task<PedidoViewModel> ListarPedidoEspecífico(int identity);
         Task CadastrarPedidoAsync(Pedido produto);
         Task<Pedido> EditarPedidoAsync(int id, Pedido produto);
+        Task<Pedido> RegistrarPagamentoPedidoAsync(int id, bool pago);
         Task DeletarPedido(int identity);        
         Task SaveChangesASync();
     }

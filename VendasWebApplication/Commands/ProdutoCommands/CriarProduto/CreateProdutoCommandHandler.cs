@@ -1,13 +1,8 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VendasWebCore.Entities;
 using VendasWebCore.Repositories;
 
-namespace VendasWebApplication.Commands.CreateProduto
+namespace VendasWebApplication.Commands.ProdutoCommands.CriarProduto
 {
     public class CreateProdutoCommandHandler : IRequestHandler<CreateProdutoCommand, Unit>
     {

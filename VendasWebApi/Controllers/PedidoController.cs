@@ -1,19 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using VendasWebApplication.Commands.PedidoCommands.CriarPedido;
+using VendasWebApplication.Commands.PedidoCommands.DeletarPedido;
+using VendasWebApplication.Commands.PedidoCommands.EditarPedido;
+using VendasWebApplication.Commands.PedidoCommands.RegistraPagamento;
+using VendasWebApplication.Queries.GetAllPedidos;
+using VendasWebApplication.Queries.GetPedidoById;
 using VendasWebCore.Entities;
 using VendasWebCore.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VendasWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class PedidoController : ControllerBase
-    {        
-        private readonly IPedidoService _pedidoService; 
+    {           
+        private readonly IMediator _mediator;
 
-        public PedidoController(IPedidoService pedidoService)
-        {
-            _pedidoService = pedidoService;
+        public PedidoController(IMediator mediator)
+        {            
+            _mediator = mediator;
         }
 
 
@@ -35,35 +43,36 @@ namespace VendasWebApi.Controllers
         /// apareça ou no nome do cliente ou no email do cliente
         /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllOrdersAsync(string? query, int page = 1)
-        {     
-            var listaPedidos = await _pedidoService.ListarPedidosAsync(query, page);
+        public async Task<IActionResult> GetAllOrdersAsync([FromQuery]GetAllPedidosQuery query)
+        {            
+            var listaPedidos = await _mediator.Send(query);
             return Ok(listaPedidos);
         }
 
         
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrderByIdAsync(int id)
-        {         
-            var pedido = await _pedidoService.ListarPedidoAsync(id);
+        [HttpGet]
+        [Route("getPedidoEspecífico")]
+        public async Task<IActionResult> GetOrderByIdAsync([FromQuery] GetPedidoByIdQuery query)
+        {
+            var pedido = await _mediator.Send(query);            
             return Ok(pedido);
         }
 
         
         [HttpPost]
-        public async Task<IActionResult> CadastrarPedido([FromBody] Pedido pedido)
+        public async Task<IActionResult> CadastrarPedido([FromBody] CriarPedidoCommand pedido)
         {
-            await _pedidoService.CadastrarPedidoAsync(pedido);         
+            await _mediator.Send(pedido);            
             return Ok("Pedido Cadastrado com sucesso!");
         }
 
         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditarPedido(int id, [FromBody] Pedido request)
+        [HttpPut]
+        public async Task<IActionResult> EditarPedido(EditarPedidoCommand editCommand)
         {
             try
             {                
-                var pedidofinal = await _pedidoService.EditarPedidoAsync(id, request);
+                var pedidofinal = await _mediator.Send(editCommand);
                 return Ok(pedidofinal);
             }
             catch (KeyNotFoundException ex)
@@ -71,13 +80,28 @@ namespace VendasWebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-                
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletarPedido(int id)
+
+        [HttpPut]
+        [Route("registraPagamento")]
+        public async Task<IActionResult> RegistrarPagamento(RegistraPagamentoCommand pagamentoCommand)
         {
             try
-            {             
-                await _pedidoService.DeletarPedidoAsync(id);
+            {
+                var pedidofinal = await _mediator.Send(pagamentoCommand);
+                return Ok(pedidofinal);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarPedido(DeletarPedidoCommand deleteCommand)
+        {
+            try
+            {
+                await _mediator.Send(deleteCommand);
                 return Ok("Pedido deletado com sucesso!");
             }
             catch (DbUpdateConcurrencyException ex)

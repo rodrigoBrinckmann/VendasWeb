@@ -4,7 +4,7 @@
         <name>VendasWebApi</name>
     </assembly>
     <members>
-        <member name="M:VendasWebApi.Controllers.PedidoController.GetAllOrdersAsync(System.String,System.Int32)">
+        <member name="M:VendasWebApi.Controllers.PedidoController.GetAllOrdersAsync(VendasWebApplication.Queries.GetAllPedidos.GetAllPedidosQuery)">
              <summary>
              Lista todos os pedidos. Pode usar um parâmetro adicional, de acordo com as instruções
              </summary>

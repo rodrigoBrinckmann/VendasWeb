@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using VendasWebCore.Entities;
 using VendasWebCore.Repositories;
 
-namespace VendasWebApplication.Commands.UpdateProduto
+namespace VendasWebApplication.Commands.ProdutoCommands.UpdateProduto
 {
     public class UpdateProdutoCommandHandler : IRequestHandler<UpdateProdutoCommand, Unit>
     {
@@ -17,7 +17,7 @@ namespace VendasWebApplication.Commands.UpdateProduto
             _produtoRepository = produtoRepository;
         }
         public async Task<Unit> Handle(UpdateProdutoCommand request, CancellationToken cancellationToken)
-        {            
+        {
             var produtoNovo = new Produto(request.NomeProduto, request.Valor);
             await _produtoRepository.EditarProdutoAsync(request.Id, produtoNovo);
             return Unit.Value;

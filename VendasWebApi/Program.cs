@@ -1,11 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using VendasWebApplication;
 using VendasWebCore.Repositories;
-using VendasWebCore.Services;
-using VendasWebApplication.Services;
 using VendasWebInfrastructure.Persistence;
 using VendasWebInfrastructure.Persistence.Repositories;
-using VendasWebApplication.Services.ProdutoServices;
-using VendasWebApplication;
 
 var builder = WebApplication.CreateBuilder(args);
 

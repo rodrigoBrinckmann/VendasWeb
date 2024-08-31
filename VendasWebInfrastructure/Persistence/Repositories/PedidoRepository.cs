@@ -12,7 +12,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
     public class PedidoRepository : IPedidoRepository
     {
         private readonly VendasWebDbContext _dbContext;
-        private const int PAGE_SIZE = 2;
+        private const int PAGE_SIZE = 5;
 
         public PedidoRepository(VendasWebDbContext dbContext, IConfiguration configuration)
         {
@@ -21,11 +21,11 @@ namespace VendasWebInfrastructure.Persistence.Repositories
 
         public async Task<PaginationResult<PedidoViewModel>> ListarPedidos(string query, int page)
         {
-            List<PedidoViewModel> todosPedidos = new();
+            List<PedidoViewModel> pedidosViewModel = new();
             PaginationResult<Pedido> pedidos = new();
+
             IQueryable<Pedido> pedidosQ = _dbContext.Pedidos;
 
-            //usar filtragem = 'like'
             if (!string.IsNullOrWhiteSpace(query))
             {
                 pedidosQ = pedidosQ
@@ -37,7 +37,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             }
             else
             {
-                pedidos.Data = await pedidosQ.ToListAsync();
+                pedidos = await pedidosQ.GetPaged<Pedido>(page, PAGE_SIZE);
             }
 
             if (pedidos == null) return null;
@@ -64,7 +64,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                 valorTotal,
                 produtosDoPedido
                 );
-                todosPedidos.Add(projetoDetalhadoViewModel);
+                pedidosViewModel.Add(projetoDetalhadoViewModel);
             }
 
             var paginationPedidosViewModel = new PaginationResult<PedidoViewModel>
@@ -73,7 +73,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                     pedidos.TotalPages,
                     pedidos.PageSize,
                     pedidos.ItemsCount,
-                    todosPedidos
+                    pedidosViewModel
                 );
 
             return paginationPedidosViewModel;
@@ -138,7 +138,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                 var pedidoFinal = await _dbContext.Pedidos.SingleOrDefaultAsync(p => p.IdPedido == id);
                 if (pedidoFinal is not null)
                 {
-                    pedidoFinal.Update(pedido);
+                    pedidoFinal.Update(pedido, pedidoFinal);
                     await SaveChangesASync();
                     return pedidoFinal;
                 }
@@ -149,7 +149,26 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             }
             return pedido;
         }
-        
+
+        public async Task<Pedido> RegistrarPagamentoPedidoAsync(int id, bool pago)
+        {
+            try
+            {
+                var pedidoConsulta = await _dbContext.Pedidos.SingleOrDefaultAsync(p => p.IdPedido == id);
+                if (pedidoConsulta is not null)
+                {
+                    pedidoConsulta.UpdatePagamento(pago);
+                    await SaveChangesASync();
+                    return pedidoConsulta;
+                }
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException("Pedido não existente no banco de dados - Não atualizado", e);
+            }
+            return new Pedido();
+        }
+
 
         public async Task SaveChangesASync()
         {

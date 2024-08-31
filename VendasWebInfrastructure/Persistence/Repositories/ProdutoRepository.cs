@@ -17,7 +17,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
     public class ProdutoRepository : IProdutoRepository
     {
         private readonly VendasWebDbContext _dbContext;
-        private const int PAGE_SIZE = 2;
+        private const int PAGE_SIZE = 5;
 
         public ProdutoRepository(VendasWebDbContext dbContext, IConfiguration configuration)
         {

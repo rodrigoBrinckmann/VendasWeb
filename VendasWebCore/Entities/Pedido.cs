@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 namespace VendasWebCore.Entities
 {
     public class Pedido
-    {
+    {        
+
         [JsonIgnore]
         public int IdPedido { get; set; }        
         public string NomeCliente { get; private set; } = string.Empty;        
@@ -19,11 +20,46 @@ namespace VendasWebCore.Entities
         public bool Pago { get; private set; }
         public List<ItensPedido>? ItensPedidos { get; set; }
 
-        public void Update(Pedido pedido)
+        public Pedido()
         {
-            NomeCliente = pedido.NomeCliente;
-            EmailCliente = pedido.EmailCliente;
-            Pago = pedido.Pago;
+            
         }
+        
+        public Pedido(string nomeCliente, string emailCliente)
+        {
+            NomeCliente = nomeCliente;
+            EmailCliente = emailCliente;
+        }
+
+        public Pedido(string nomeCliente, string emailCliente, DateTime dataCriacao, bool pago)
+        {
+            NomeCliente = nomeCliente;
+            EmailCliente = emailCliente;
+            DataCriacao = dataCriacao;
+            Pago = pago;
+        }
+
+        public void Update(Pedido pedidoNew, Pedido pedidoOld)
+        {
+            if (!string.IsNullOrEmpty(pedidoNew.NomeCliente))
+            {
+                if (pedidoOld.NomeCliente != pedidoNew.NomeCliente)
+                {
+                    NomeCliente = pedidoNew.NomeCliente;
+                }
+            }
+            if (!string.IsNullOrEmpty(pedidoNew.EmailCliente))
+            {
+                if (pedidoOld.EmailCliente != pedidoNew.EmailCliente)
+                {
+                    EmailCliente = pedidoNew.EmailCliente;
+                }
+            }                        
+        }
+
+        public void UpdatePagamento(bool pagamento)
+        {
+            Pago = pagamento;
+        }            
     }
 }

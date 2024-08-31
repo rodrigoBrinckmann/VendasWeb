@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using VendasWebApplication.Commands.CreateProduto;
-using VendasWebApplication.Commands.DeletarProduto;
-using VendasWebApplication.Commands.UpdateProduto;
+using VendasWebApplication.Commands.ProdutoCommands.CriarProduto;
+using VendasWebApplication.Commands.ProdutoCommands.DeletarProduto;
+using VendasWebApplication.Commands.ProdutoCommands.UpdateProduto;
 using VendasWebApplication.Queries.GetAllProdutos;
 using VendasWebApplication.Queries.GetProdutoById;
-using VendasWebApplication.Services.ProdutoServices;
-using VendasWebCore.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,12 +14,12 @@ namespace VendasWebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class ProdutoController : ControllerBase
-    {
-        private readonly IProdutoService _produtoService;
+    {        
+        private readonly IMediator _mediator;
 
-        public ProdutoController(IProdutoService produtoService)
-        {
-            _produtoService = produtoService;
+        public ProdutoController(IMediator mediator)
+        {            
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace VendasWebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProductsAsync([FromQuery] GetAllProdutosQuery getAllProductsQuery)
         {
-            return Ok(await _produtoService.ListarProdutosAsync(getAllProductsQuery));
+            return Ok(await _mediator.Send(getAllProductsQuery));            
         }
                 
         [HttpGet]
@@ -50,7 +49,7 @@ namespace VendasWebApi.Controllers
         {
             try
             {
-                return Ok(await _produtoService.ListarProdutoAsync(query));
+                return Ok(await _mediator.Send(query));                
             }
             catch (Exception ex)
             {
@@ -61,7 +60,7 @@ namespace VendasWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CadastrarProduto(CreateProdutoCommand request)
         {
-            await _produtoService.CadastrarProdutoAsync(request);            
+            await _mediator.Send(request);
             return Ok("Produto Cadastrado com sucesso!");
         }
                 
@@ -70,7 +69,7 @@ namespace VendasWebApi.Controllers
         {
             try
             {
-                await _produtoService.EditarProdutoAsync(request);
+                await _mediator.Send(request);
                 return Ok("Produto editado com sucesso");
             }
             catch (KeyNotFoundException ex)
@@ -78,13 +77,13 @@ namespace VendasWebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-                
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletarProduto(DeleteProdutoCommand request)
+
+        [HttpDelete]
+        public async Task<IActionResult> DeletarProduto([FromQuery] DeleteProdutoCommand request)
         {
             try
             {
-                await _produtoService.DeletarProdutoAsync(request);
+                await _mediator.Send(request);                
                 return Ok("Produto deletado da base de dados");
             }
             catch (DbUpdateConcurrencyException ex)
