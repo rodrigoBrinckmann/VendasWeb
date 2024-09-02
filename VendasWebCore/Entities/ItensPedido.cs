@@ -11,9 +11,11 @@ namespace VendasWebCore.Entities
     {
         [JsonIgnore]
         public int ItemPedidoId { get; set; }
-        public int IdPedido { get; set; }        
+        public int IdPedido { get; set; }
+        [JsonIgnore]
         public Pedido? Pedido { get; set; }
-        public int IdProduto { get; set; }        
+        public int IdProduto { get; set; }
+        [JsonIgnore]
         public Produto? Produto { get; set; }
         public int Quantidade { get; set; }
 

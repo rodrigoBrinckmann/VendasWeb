@@ -31,12 +31,13 @@ namespace VendasWebCore.Entities
             EmailCliente = emailCliente;
         }
 
-        public Pedido(string nomeCliente, string emailCliente, DateTime dataCriacao, bool pago)
+        public Pedido(string nomeCliente, string emailCliente, DateTime dataCriacao, bool pago, List<ItensPedido> itensPedidos)
         {
             NomeCliente = nomeCliente;
             EmailCliente = emailCliente;
             DataCriacao = dataCriacao;
             Pago = pago;
+            ItensPedidos = itensPedidos;
         }
 
         public void Update(Pedido pedidoNew, Pedido pedidoOld)

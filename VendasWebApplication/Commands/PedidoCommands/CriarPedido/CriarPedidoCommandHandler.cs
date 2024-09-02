@@ -11,18 +11,18 @@ using VendasWebInfrastructure.Persistence.Repositories;
 
 namespace VendasWebApplication.Commands.PedidoCommands.CriarPedido
 {
-    public class CriarPedidoCommandHandler : IRequestHandler<CriarPedidoCommand, Unit>
+    public class CriarPedidoCommandHandler : IRequestHandler<CriarPedidoCommand, int>
     {
         private readonly IPedidoRepository _pedidoRepository;
         public CriarPedidoCommandHandler(IPedidoRepository pedidoRepository)
         {
             _pedidoRepository = pedidoRepository;
         }
-        public async Task<Unit> Handle(CriarPedidoCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CriarPedidoCommand request, CancellationToken cancellationToken)
         {
-            var pedido = new Pedido(request.NomeCliente, request.EmailCliente, request.DataCriacao, request.Pago);
+            var pedido = new Pedido(request.NomeCliente, request.EmailCliente, request.DataCriacao, request.Pago, request.ItensPedidos);
             await _pedidoRepository.CadastrarPedidoAsync(pedido);
-            return Unit.Value;
+            return pedido.IdPedido;
         }
     }
 }

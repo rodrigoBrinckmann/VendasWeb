@@ -62,7 +62,8 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                 pedido.EmailCliente,
                 pedido.Pago,
                 valorTotal,
-                produtosDoPedido
+                produtosDoPedido,
+                pedido.DataCriacao
                 );
                 pedidosViewModel.Add(projetoDetalhadoViewModel);
             }
@@ -104,7 +105,8 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                 pedido.EmailCliente,
                 pedido.Pago,
                 valorTotal,
-                produtosDoPedido
+                produtosDoPedido,
+                pedido.DataCriacao
                 );
 
             return projetoDetalhadoViewModel;

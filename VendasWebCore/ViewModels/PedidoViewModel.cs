@@ -10,14 +10,15 @@
         public decimal ValorTotal { get; set; }        
         public List<ProdutoPedidoViewModel> ItensPedidos { get; set; }
 
-        public PedidoViewModel(int idPedido, string nomeCliente, string emailCLiente, bool pago, decimal valorTotal, List<ProdutoPedidoViewModel> itensPedidos)
+        public PedidoViewModel(int idPedido, string nomeCliente, string emailCLiente, bool pago, decimal valorTotal, List<ProdutoPedidoViewModel> itensPedidos, DateTime dataCriacao)
         {
             IdPedido = idPedido;
             NomeCliente = nomeCliente;
             EmailCliente = emailCLiente;
+            DataCriacao = dataCriacao;
             Pago = pago;
             ValorTotal = valorTotal;
-            ItensPedidos = itensPedidos;
+            ItensPedidos = itensPedidos;            
         }
     }
 }

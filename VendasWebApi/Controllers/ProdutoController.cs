@@ -29,7 +29,7 @@ namespace VendasWebApi.Controllers
         /// <remarks>
         /// https://localhost:7277/api/Produto
         /// 
-        /// https://localhost:7277/api/Produto?query=****        
+        /// https://localhost:7277/api/Produto?Query=12321&Page=1231****
         /// </remarks>
         /// <returns>
         /// O parâmetro query e o page não são obrigatórios

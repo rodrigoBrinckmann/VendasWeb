@@ -1,75 +1,77 @@
 ﻿using FluentAssertions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VendasWebApi.Controllers;
+using VendasWebApplication.Commands.ItensPedidoCommands.CadastrarItensPedido;
+using VendasWebApplication.Commands.ItensPedidoCommands.DeletarItensPedido;
+using VendasWebApplication.Commands.ItensPedidoCommands.EditarItensPedido;
+using VendasWebApplication.Queries.GetAllItensPedidos;
+using VendasWebApplication.Queries.GetItemPedidoById;
+using VendasWebApplication.Queries.GetPedidoById;
+using VendasWebApplication.Queries.GetProdutoById;
 using VendasWebCore.Entities;
-using VendasWebCore.Services;
+using VendasWebCore.Models;
 using VendasWebCore.ViewModels;
 
 namespace ControllerTests
 {
     public class ItensPedidoControllerTests
-    {
-        private readonly Mock<IItensPedidoService> _itensPedidoServiceMock = new();
-
-        public ItensPedidoControllerTests()
-        {
-
-        }
-
-
+    {        
+        private readonly Mock<IMediator> _mediatrMock = new();
+        
         [Fact(DisplayName = "ItensPedidoControllerTests - Returns ok with a single itemPedido")]
         public async Task Get_ById()
         {
             //arrange            
             ItensPedido itemPedido = new ItensPedido();
-            _itensPedidoServiceMock.Setup(s => s.ListarItensPedidoAsync(It.IsAny<int>())).ReturnsAsync(itemPedido);
+            GetItemPedidoByIdQuery request = new GetItemPedidoByIdQuery();
+            _mediatrMock.Setup(s => s.Send(It.IsAny<GetItemPedidoByIdQuery>(), new CancellationToken())).ReturnsAsync(itemPedido);            
             var controller = GetController();
 
             //act
-            var response = await controller.GetItensPedidoByIdAsync(1);
+            var response = await controller.GetItensPedidoByIdAsync(request);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<ItensPedido>(It.IsAny<GetItemPedidoByIdQuery>(), new CancellationToken()), Times.Once());
         }
 
         [Fact(DisplayName = "ItensPedidoControllerTests - Returns the list of orders")]
         public async Task Get_All()
         {
             //arrange
-            List<ItensPedido> listItensPedidos = new List<ItensPedido>();
-            _itensPedidoServiceMock.Setup(s => s.ListarAllItensPedidosAsync()).ReturnsAsync(listItensPedidos);
+            GetAllItensPedidosQuery listItensPedidos = new ();            
+            PaginationResult<ItensPedido> paginationItensPedidos = new();
+            _mediatrMock.Setup(s => s.Send(It.IsAny<GetAllItensPedidosQuery>(), new CancellationToken())).ReturnsAsync(paginationItensPedidos);            
             var controller = GetController();
 
             //act
-            var response = await controller.GetAllItensPedidoAsync();
+            var response = await controller.GetAllItensPedidoAsync(listItensPedidos);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<PaginationResult<ItensPedido>>(It.IsAny<GetAllItensPedidosQuery>(), new CancellationToken()), Times.Once());
         }
 
         [Fact(DisplayName = "ItensPedidoControllerTests - Create a new itensPedido")]
         public async Task Post()
         {
             //arrange            
-            List<ItensPedido> itensPedidoList = new();            
-            _itensPedidoServiceMock.Setup(s => s.CadastrarItensPedidoAsync(itensPedidoList));
+            CadastrarItensPedidoCommand itensPedidoRequest = new();            
+            _mediatrMock.Setup(s => s.Send(It.IsAny<CadastrarItensPedidoCommand>(), new CancellationToken()));
             var controller = GetController();
 
             //act
-            var response = await controller.CadastrarItensPedido(itensPedidoList);
+            var response = await controller.CadastrarItensPedido(itensPedidoRequest);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<Unit>(It.IsAny<CadastrarItensPedidoCommand>(), new CancellationToken()), Times.Once());
         }
 
         [Fact(DisplayName = "ItensPedidoControllerTests - Editar ItemPedido")]
@@ -77,42 +79,47 @@ namespace ControllerTests
         {
             //arrange            
             ItensPedido itensPedido = new ItensPedido() { IdPedido = 5};
-            _itensPedidoServiceMock.Setup(s => s.EditarItensPedidoAsync(It.IsAny<int>(), itensPedido)).ReturnsAsync(itensPedido);
+            EditarItensPedidoCommand command = new();
+            _mediatrMock.Setup(s => s.Send(It.IsAny<EditarItensPedidoCommand>(), new CancellationToken())).ReturnsAsync(itensPedido);            
             var controller = GetController();
 
             //act
-            var response = await controller.EditarItemPedido(1, itensPedido);
+            var response = await controller.EditarItemPedido(command);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<ItensPedido>(It.IsAny<EditarItensPedidoCommand>(), new CancellationToken()), Times.Once());
         }
 
         [Fact(DisplayName = "ItensPedidoControllerTests - Deletar ItemPedido")]
         public async Task Delete()
         {
-            //arrange                        
-            _itensPedidoServiceMock.Setup(s => s.DeletarItensPedidoAsync(It.IsAny<int>()));
+            //arrange
+            DeletarItensPedidoCommand command = new();
+            _mediatrMock.Setup(s => s.Send(It.IsAny<DeletarItensPedidoCommand>(), new CancellationToken()));
             var controller = GetController();
 
             //act
-            var response = await controller.DeletarItemPedido(1);
+            var response = await controller.DeletarItemPedido(command);
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<Unit>(It.IsAny<DeletarItensPedidoCommand>(), new CancellationToken()), Times.Once());
         }
 
         [Fact(DisplayName = "ItensPedidoControllerTests - Editar ItemPedido - Exception")]
         public async Task Put_NOK()
         {
             //arrange            
-            ItensPedido itensPedido = new ItensPedido() { IdPedido = 0 };            
-            _itensPedidoServiceMock.Setup(s => s.EditarItensPedidoAsync(It.IsAny<int>(), itensPedido)).ReturnsAsync(itensPedido);
+            ItensPedido itensPedido = new ItensPedido() { IdPedido = 0 };
+            EditarItensPedidoCommand command = new();
+            _mediatrMock.Setup(s => s.Send(It.IsAny<EditarItensPedidoCommand>(), new CancellationToken())).ReturnsAsync(itensPedido);
             var controller = GetController();
 
             //act
-            var response = await controller.EditarItemPedido(1, itensPedido);
+            var response = await controller.EditarItemPedido(command);
 
             //assert
             var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
@@ -122,12 +129,13 @@ namespace ControllerTests
         public async Task Delete_NOK()
         {
             //arrange
+            DeletarItensPedidoCommand command = new();
             var expectedException = new DbUpdateConcurrencyException("Erro");
-            _itensPedidoServiceMock.Setup(s => s.DeletarItensPedidoAsync(It.IsAny<int>())).ThrowsAsync(expectedException);
+            _mediatrMock.Setup(s => s.Send(It.IsAny<DeletarItensPedidoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);            
             var controller = GetController();
 
             //act
-            var response = await controller.DeletarItemPedido(1);
+            var response = await controller.DeletarItemPedido(command);
 
             //assert
             var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
@@ -135,7 +143,7 @@ namespace ControllerTests
 
         private ItensPedidoController GetController()
         {
-            var controller = new ItensPedidoController(_itensPedidoServiceMock.Object);
+            var controller = new ItensPedidoController(_mediatrMock.Object);
             return controller;
         }
     }

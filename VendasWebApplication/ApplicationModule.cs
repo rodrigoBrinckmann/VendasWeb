@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using VendasWebApplication.Services;
-using VendasWebCore.Services;
 
 namespace VendasWebApplication
 {
@@ -9,18 +7,10 @@ namespace VendasWebApplication
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddMediatR(cfg => 
-                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
-                .AddServices();
+            services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));         
 
             return services;
-        }
-
-        public static IServiceCollection AddServices(this IServiceCollection services)
-        {            
-            services.AddScoped<IItensPedidoService, ItensPedidoService>();
-
-            return services;
-        }
+        }        
     }
 }

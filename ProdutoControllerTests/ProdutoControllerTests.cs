@@ -13,7 +13,7 @@ using VendasWebCore.Models;
 using VendasWebCore.ViewModels;
 
 
-namespace ProdutoControllerTests
+namespace ControllerTests
 {
     public class ProdutoControllerTests
     {           

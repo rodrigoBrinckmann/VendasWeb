@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VendasWebCore.Entities;
+using VendasWebCore.Models;
 
 namespace VendasWebCore.Repositories
 {
@@ -12,7 +13,7 @@ namespace VendasWebCore.Repositories
         Task CadastrarItensPedidoAsync(List<ItensPedido> produto);
         Task<ItensPedido> EditarItensPedidoAsync(int id, ItensPedido itensPedido);
         Task DeletarItensPedido(int id);
-        Task<List<ItensPedido>> ListarItensPedido();
+        Task<PaginationResult<ItensPedido>> ListarItensPedido(string query, int page);
         Task<ItensPedido> ListarItensPedidoEspecífico(int id);
         Task SaveChangesASync();
     }    

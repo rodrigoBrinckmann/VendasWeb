@@ -30,8 +30,14 @@ namespace VendasWebCore.Entities
 
         public void Update(Produto produto)
         {
-            NomeProduto = produto.NomeProduto;
-            Valor = produto.Valor;            
+            if (produto.Valor > 0)
+            {
+                Valor = produto.Valor;             
+            }
+            if (!string.IsNullOrWhiteSpace(produto.NomeProduto))
+            {
+                NomeProduto = produto.NomeProduto;
+            }
         }
     }
 }

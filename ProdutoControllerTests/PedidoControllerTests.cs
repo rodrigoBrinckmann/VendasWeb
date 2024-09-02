@@ -12,7 +12,6 @@ using VendasWebApplication.Queries.GetAllPedidos;
 using VendasWebApplication.Queries.GetPedidoById;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
-using VendasWebCore.Services;
 using VendasWebCore.ViewModels;
 
 namespace ControllerTests
@@ -26,7 +25,7 @@ namespace ControllerTests
         public async Task Get_ById()
         {
             //arrange            
-            PedidoViewModel responsePedido = new PedidoViewModel(1,"Teste","email@email.com",true,10m,new List<ProdutoPedidoViewModel>());
+            PedidoViewModel responsePedido = new PedidoViewModel(1,"Teste","email@email.com",true,10m,new List<ProdutoPedidoViewModel>(),DateTime.Now);
             _mediatrMock.Setup(s => s.Send(It.IsAny<GetPedidoByIdQuery>(), new CancellationToken())).ReturnsAsync(responsePedido);            
             var controller = GetController();
 
@@ -36,6 +35,23 @@ namespace ControllerTests
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "PedidoControllerTests - Pedido doesn' exists")]
+        public async Task Get_ById_Doesnt_exists()
+        {
+            //arrange            
+            PedidoViewModel responsePedido = new PedidoViewModel(1, "Teste", "email@email.com", true, 10m, new List<ProdutoPedidoViewModel>(), DateTime.Now);
+            _mediatrMock.Setup(s => s.Send(It.IsAny<GetPedidoByIdQuery>(), new CancellationToken()));
+            var controller = GetController();
+
+            //act
+            var response = await controller.GetOrderByIdAsync(new GetPedidoByIdQuery());
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
+            result.Value.Should().NotBeNull();
+            result.Value.Should().Be("Pedido não cadastrado na base de dados");
         }
 
         [Fact(DisplayName = "PedidoControllerTests - Returns the list of orders")]

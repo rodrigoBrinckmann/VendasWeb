@@ -1,50 +1,60 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Core;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using VendasWebApplication.Services;
-using VendasWebCore.Entities;
-using VendasWebCore.Repositories;
-using VendasWebCore.Services;
+using VendasWebApplication.Commands.ItensPedidoCommands.CadastrarItensPedido;
+using VendasWebApplication.Commands.ItensPedidoCommands.DeletarItensPedido;
+using VendasWebApplication.Commands.ItensPedidoCommands.EditarItensPedido;
+using VendasWebApplication.Queries.GetAllItensPedidos;
+using VendasWebApplication.Queries.GetItemPedidoById;
 
 namespace VendasWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ItensPedidoController : ControllerBase
-    {
-        private readonly IItensPedidoService _itensPedidoService;
+    {        
+        private readonly IMediator _mediator;
 
-        public ItensPedidoController(IItensPedidoService itensPedidoService)
+        public ItensPedidoController(IMediator mediator)
         {
-            _itensPedidoService = itensPedidoService;
+            _mediator = mediator;
         }
                 
         [HttpGet]
-        public async Task<IActionResult> GetAllItensPedidoAsync()
-        {            
-            return Ok(await _itensPedidoService.ListarAllItensPedidosAsync());
+        public async Task<IActionResult> GetAllItensPedidoAsync([FromQuery] GetAllItensPedidosQuery getAllItensPedidosQuery)
+        {
+            return Ok(await _mediator.Send(getAllItensPedidosQuery));                
         }
 
         
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetItensPedidoByIdAsync(int id)
-        {            
-            return Ok(await _itensPedidoService.ListarItensPedidoAsync(id));
+        [HttpGet]
+        [Route("getIdEspecifico")]
+        public async Task<IActionResult> GetItensPedidoByIdAsync([FromQuery] GetItemPedidoByIdQuery getItemPedidoByIdQuery)
+        {
+            try
+            {
+                return Ok(await _mediator.Send(getItemPedidoByIdQuery));                
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }                
         }
 
         
         [HttpPost]
-        public async Task<IActionResult> CadastrarItensPedido([FromBody] List<ItensPedido> itensPedidoList)
+        public async Task<IActionResult> CadastrarItensPedido([FromBody] CadastrarItensPedidoCommand itensPedidoList)
         {
-            await _itensPedidoService.CadastrarItensPedidoAsync(itensPedidoList);            
+            await _mediator.Send(itensPedidoList);            
             return Ok("Itens do pedido cadastrado com sucesso!");
         }
 
         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditarItemPedido(int id, [FromBody] ItensPedido request)
-        {
-            var itensPedido = await _itensPedidoService.EditarItensPedidoAsync(id, request);
+        [HttpPut]
+        public async Task<IActionResult> EditarItemPedido([FromBody] EditarItensPedidoCommand request)
+        {            
+            var itensPedido = await _mediator.Send(request);
             if (itensPedido.IdPedido != 0)
                 return Ok("ItemPedido editado com sucesso");
             else
@@ -52,12 +62,12 @@ namespace VendasWebApi.Controllers
             
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletarItemPedido(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeletarItemPedido([FromQuery] DeletarItensPedidoCommand request)
         {
             try
             {
-                await _itensPedidoService.DeletarItensPedidoAsync(id);                
+                await _mediator.Send(request);                        
                 return Ok("ItemPedido deletado com sucesso");
             }
             catch (DbUpdateConcurrencyException ex)

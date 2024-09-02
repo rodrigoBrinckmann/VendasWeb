@@ -8,8 +8,7 @@
              <summary>
              Lista todos os pedidos. Pode usar um parâmetro adicional, de acordo com as instruções
              </summary>
-             <param name="query"></param>
-             <param name="page"></param>
+             <param name="getAllPedidosQuery"></param>
              <remarks>
              https://localhost:7277/api/Pedido
             
@@ -22,22 +21,6 @@
              apareça ou no nome do cliente ou no email do cliente
              </returns>
         </member>
-        <member name="M:VendasWebApi.Controllers.ProdutoController.GetAllProductsAsync(VendasWebApplication.Queries.GetAllProdutos.GetAllProdutosQuery)">
-            <summary>
-            Lista todos os produtos. Pode usar um parâmetro adicional, de acordo com as instruções
-            </summary>
-            <param name="getAllProductsQuery"></param>
-            <remarks>
-            https://localhost:7277/api/Produto
-            
-            https://localhost:7277/api/Produto?query=****        
-            </remarks>
-            <returns>
-            O parâmetro query e o page não são obrigatórios
-            Se usado sem o parâmetro, vai trazer todos os produtos da base de dados
-            Se colocado o parâmetro query, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro apareça        
-            Se colocado o parâmetro page, ele trará a pagina correspondente a consulta, no caso de haver mais de uma página
-            </returns>        
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:VendasWebApi.Controllers.ProdutoController.GetAllProductsAsync(VendasWebApplication.Queries.GetAllProdutos.GetAllProdutosQuery)" -->
     </members>
 </doc>
