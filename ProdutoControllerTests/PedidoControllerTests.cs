@@ -75,7 +75,7 @@ namespace ControllerTests
         {
             //arrange            
             CriarPedidoCommand pedido = new CriarPedidoCommand();            
-            _mediatrMock.Setup(m => m.Send(It.IsAny<CriarPedidoCommand>(), new CancellationToken()));
+            _mediatrMock.Setup(m => m.Send(It.IsAny<CriarPedidoCommand>(), new CancellationToken())).ReturnsAsync(It.IsAny<int>);
             
             var controller = GetController();
 

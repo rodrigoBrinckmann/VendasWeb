@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VendasWebCore.Entities;
+using VendasWebCore.ViewModels;
 
 namespace VendasWebApplication.Queries.GetItemPedidoById
 {
-    public class GetItemPedidoByIdQuery : IRequest<ItensPedido>
+    public class GetItemPedidoByIdQuery : IRequest<ItensPedidoViewModel>
     {
         public int Id { get; set; }
     }

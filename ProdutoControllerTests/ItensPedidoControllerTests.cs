@@ -25,7 +25,7 @@ namespace ControllerTests
         public async Task Get_ById()
         {
             //arrange            
-            ItensPedido itemPedido = new ItensPedido();
+            ItensPedidoViewModel itemPedido = new ItensPedidoViewModel();
             GetItemPedidoByIdQuery request = new GetItemPedidoByIdQuery();
             _mediatrMock.Setup(s => s.Send(It.IsAny<GetItemPedidoByIdQuery>(), new CancellationToken())).ReturnsAsync(itemPedido);            
             var controller = GetController();
@@ -36,7 +36,7 @@ namespace ControllerTests
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
-            _mediatrMock.Verify(x => x.Send<ItensPedido>(It.IsAny<GetItemPedidoByIdQuery>(), new CancellationToken()), Times.Once());
+            _mediatrMock.Verify(x => x.Send<ItensPedidoViewModel>(It.IsAny<GetItemPedidoByIdQuery>(), new CancellationToken()), Times.Once());
         }
 
         [Fact(DisplayName = "ItensPedidoControllerTests - Returns the list of orders")]
@@ -44,7 +44,7 @@ namespace ControllerTests
         {
             //arrange
             GetAllItensPedidosQuery listItensPedidos = new ();            
-            PaginationResult<ItensPedido> paginationItensPedidos = new();
+            PaginationResult<ItensPedidoViewModel> paginationItensPedidos = new();
             _mediatrMock.Setup(s => s.Send(It.IsAny<GetAllItensPedidosQuery>(), new CancellationToken())).ReturnsAsync(paginationItensPedidos);            
             var controller = GetController();
 
@@ -54,7 +54,7 @@ namespace ControllerTests
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
-            _mediatrMock.Verify(x => x.Send<PaginationResult<ItensPedido>>(It.IsAny<GetAllItensPedidosQuery>(), new CancellationToken()), Times.Once());
+            _mediatrMock.Verify(x => x.Send<PaginationResult<ItensPedidoViewModel>>(It.IsAny<GetAllItensPedidosQuery>(), new CancellationToken()), Times.Once());
         }
 
         [Fact(DisplayName = "ItensPedidoControllerTests - Create a new itensPedido")]

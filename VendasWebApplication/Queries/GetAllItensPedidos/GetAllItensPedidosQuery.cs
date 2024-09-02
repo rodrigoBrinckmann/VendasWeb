@@ -10,7 +10,7 @@ using VendasWebCore.ViewModels;
 
 namespace VendasWebApplication.Queries.GetAllItensPedidos
 {
-    public class GetAllItensPedidosQuery : IRequest<PaginationResult<ItensPedido>>
+    public class GetAllItensPedidosQuery : IRequest<PaginationResult<ItensPedidoViewModel>>
     {
         public string? Query { get; set; }
         public int Page { get; set; } = 1;

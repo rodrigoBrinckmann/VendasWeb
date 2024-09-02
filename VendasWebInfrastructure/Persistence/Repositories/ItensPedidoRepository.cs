@@ -20,7 +20,9 @@ namespace VendasWebInfrastructure.Persistence.Repositories
 
         public async Task<PaginationResult<ItensPedido>> ListarItensPedido(string query, int page)
         {
-            IQueryable<ItensPedido> itensPedido = _dbContext.ItensPedidos;
+            IQueryable<ItensPedido> itensPedido = _dbContext.ItensPedidos
+                .Include(pp => pp.Produto)
+                .Include(pp => pp.Pedido);
             if (!string.IsNullOrWhiteSpace(query))
             {
                 itensPedido = itensPedido
@@ -36,7 +38,10 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             try
             {
                 var itemPedido = await _dbContext.ItensPedidos
+                    .Include(pp => pp.Produto)
+                    .Include(pp => pp.Pedido)
                     .FirstOrDefaultAsync(ip => ip.ItemPedidoId == id);
+                    
                 if (itemPedido is not null)
                 {
                     return itemPedido;

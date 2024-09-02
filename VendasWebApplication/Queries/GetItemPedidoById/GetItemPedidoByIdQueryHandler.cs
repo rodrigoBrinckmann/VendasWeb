@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using VendasWebCore.Entities;
 using VendasWebCore.Repositories;
+using VendasWebCore.ViewModels;
 
 namespace VendasWebApplication.Queries.GetItemPedidoById
 {
-    public class GetItemPedidoByIdQueryHandler : IRequestHandler<GetItemPedidoByIdQuery, ItensPedido>
+    public class GetItemPedidoByIdQueryHandler : IRequestHandler<GetItemPedidoByIdQuery, ItensPedidoViewModel>
     {
         private readonly IItensPedidoRepository _itensPedidoRepository;
         public GetItemPedidoByIdQueryHandler(IItensPedidoRepository itensPedidoRepository)
@@ -17,9 +18,20 @@ namespace VendasWebApplication.Queries.GetItemPedidoById
             _itensPedidoRepository = itensPedidoRepository;
         }
 
-        public async Task<ItensPedido> Handle(GetItemPedidoByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ItensPedidoViewModel> Handle(GetItemPedidoByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _itensPedidoRepository.ListarItensPedidoEspecífico(request.Id);
+            var itensPedido = await _itensPedidoRepository.ListarItensPedidoEspecífico(request.Id);
+            var itensPedidoViewModel = new ItensPedidoViewModel()
+            {
+                IdPedido = itensPedido.IdPedido,
+                IdProduto = itensPedido.IdProduto,
+                Pedido = itensPedido.Pedido,
+                Produto = itensPedido.Produto,
+                Quantidade = itensPedido.Quantidade
+            };
+
+
+            return itensPedidoViewModel;
         }
     }
 }
