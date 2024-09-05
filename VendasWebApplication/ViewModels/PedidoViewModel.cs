@@ -1,4 +1,4 @@
-﻿namespace VendasWebCore.ViewModels
+﻿namespace VendasWebApplication.ViewModels
 {
     public class PedidoViewModel
     {
@@ -9,6 +9,11 @@
         public bool Pago { get; set; }
         public decimal ValorTotal { get; set; }        
         public List<ProdutoPedidoViewModel> ItensPedidos { get; set; }
+
+        public PedidoViewModel()
+        {
+            
+        }
 
         public PedidoViewModel(int idPedido, string nomeCliente, string emailCLiente, bool pago, decimal valorTotal, List<ProdutoPedidoViewModel> itensPedidos, DateTime dataCriacao)
         {

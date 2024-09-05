@@ -9,8 +9,8 @@ using VendasWebApplication.Commands.ProdutoCommands.DeletarProduto;
 using VendasWebApplication.Commands.ProdutoCommands.UpdateProduto;
 using VendasWebApplication.Queries.GetAllProdutos;
 using VendasWebApplication.Queries.GetProdutoById;
+using VendasWebApplication.ViewModels;
 using VendasWebCore.Models;
-using VendasWebCore.ViewModels;
 
 
 namespace ControllerTests

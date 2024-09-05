@@ -10,7 +10,7 @@ using VendasWebApplication.Queries.GetPedidoById;
 
 namespace VendasWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class PedidoController : ControllerBase
     {           
@@ -38,7 +38,7 @@ namespace VendasWebApi.Controllers
         /// Se colocado, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro
         /// apareça ou no nome do cliente ou no email do cliente
         /// </returns>
-        [HttpGet]
+        [HttpGet("getAllOrders")]
         public async Task<IActionResult> GetAllOrdersAsync([FromQuery] GetAllPedidosQuery getAllPedidosQuery)
         {            
             var listaPedidos = await _mediator.Send(getAllPedidosQuery);
@@ -46,8 +46,7 @@ namespace VendasWebApi.Controllers
         }
 
         
-        [HttpGet]
-        [Route("getPedidoEspecífico")]
+        [HttpGet("getOrderById")]        
         public async Task<IActionResult> GetOrderByIdAsync([FromQuery] GetPedidoByIdQuery query)
         {
             var pedido = await _mediator.Send(query);            
@@ -57,8 +56,7 @@ namespace VendasWebApi.Controllers
         }
 
         
-        [HttpPost]
-        [Route("cadastrarPedido")]
+        [HttpPost("registerOrder")]        
         public async Task<IActionResult> CadastrarPedido([FromBody] CriarPedidoCommand pedido)
         {
             var id = await _mediator.Send(pedido);            
@@ -66,7 +64,7 @@ namespace VendasWebApi.Controllers
         }
 
         
-        [HttpPut]
+        [HttpPut("editOrder")]
         public async Task<IActionResult> EditarPedido(EditarPedidoCommand editCommand)
         {
             try
@@ -80,8 +78,7 @@ namespace VendasWebApi.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("registraPagamento")]
+        [HttpPut("registerPayment")]        
         public async Task<IActionResult> RegistrarPagamento(RegistraPagamentoCommand pagamentoCommand)
         {
             try
@@ -95,7 +92,7 @@ namespace VendasWebApi.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("deleteOrder")]
         public async Task<IActionResult> DeletarPedido([FromQuery] DeletarPedidoCommand deleteCommand)
         {
             try

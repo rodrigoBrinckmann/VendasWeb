@@ -1,11 +1,6 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VendasWebApplication.ViewModels;
 using VendasWebCore.Models;
-using VendasWebCore.ViewModels;
 
 namespace VendasWebApplication.Queries.GetAllPedidos
 {

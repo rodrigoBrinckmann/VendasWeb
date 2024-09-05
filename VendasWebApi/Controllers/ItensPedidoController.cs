@@ -10,7 +10,7 @@ using VendasWebApplication.Queries.GetItemPedidoById;
 
 namespace VendasWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class ItensPedidoController : ControllerBase
     {        
@@ -21,15 +21,14 @@ namespace VendasWebApi.Controllers
             _mediator = mediator;
         }
                 
-        [HttpGet]
+        [HttpGet("getProductOrder")]
         public async Task<IActionResult> GetAllItensPedidoAsync([FromQuery] GetAllItensPedidosQuery getAllItensPedidosQuery)
         {
             return Ok(await _mediator.Send(getAllItensPedidosQuery));                
         }
 
         
-        [HttpGet]
-        [Route("getIdEspecifico")]
+        [HttpGet("getProductOrderById")]        
         public async Task<IActionResult> GetItensPedidoByIdAsync([FromQuery] GetItemPedidoByIdQuery getItemPedidoByIdQuery)
         {
             try
@@ -43,7 +42,7 @@ namespace VendasWebApi.Controllers
         }
 
         
-        [HttpPost]
+        [HttpPost("registerProductOrder")]
         public async Task<IActionResult> CadastrarItensPedido([FromBody] CadastrarItensPedidoCommand itensPedidoList)
         {
             await _mediator.Send(itensPedidoList);            
@@ -51,7 +50,7 @@ namespace VendasWebApi.Controllers
         }
 
         
-        [HttpPut]
+        [HttpPut("editProductOrder")]
         public async Task<IActionResult> EditarItemPedido([FromBody] EditarItensPedidoCommand request)
         {            
             var itensPedido = await _mediator.Send(request);
@@ -62,7 +61,7 @@ namespace VendasWebApi.Controllers
             
         }
 
-        [HttpDelete]
+        [HttpDelete("deleteProductOrder")]
         public async Task<IActionResult> DeletarItemPedido([FromQuery] DeletarItensPedidoCommand request)
         {
             try

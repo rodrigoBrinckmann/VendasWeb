@@ -12,7 +12,7 @@ using VendasWebApplication.Queries.GetAllPedidos;
 using VendasWebApplication.Queries.GetPedidoById;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
-using VendasWebCore.ViewModels;
+using VendasWebApplication.ViewModels;
 
 namespace ControllerTests
 {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
-using VendasWebCore.ViewModels;
+using VendasWebApplication.ViewModels;
 
 namespace VendasWebApplication.Queries.GetAllItensPedidos
 {

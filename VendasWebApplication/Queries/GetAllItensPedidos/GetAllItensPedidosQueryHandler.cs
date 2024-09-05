@@ -2,7 +2,7 @@
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
 using VendasWebCore.Repositories;
-using VendasWebCore.ViewModels;
+using VendasWebApplication.ViewModels;
 using VendasWebInfrastructure.Persistence.Repositories;
 
 namespace VendasWebApplication.Queries.GetAllItensPedidos

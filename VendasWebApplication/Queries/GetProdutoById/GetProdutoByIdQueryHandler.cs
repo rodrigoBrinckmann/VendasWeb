@@ -1,13 +1,6 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VendasWebApplication.Queries.GetAllProdutos;
-using VendasWebCore.Models;
+using VendasWebApplication.ViewModels;
 using VendasWebCore.Repositories;
-using VendasWebCore.ViewModels;
 
 namespace VendasWebApplication.Queries.GetProdutoById
 {

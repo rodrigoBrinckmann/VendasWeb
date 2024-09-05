@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using VendasWebCore.Calculation;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
 using VendasWebCore.Repositories;
-using VendasWebCore.ViewModels;
 
 namespace VendasWebInfrastructure.Persistence.Repositories
 {
@@ -14,17 +11,19 @@ namespace VendasWebInfrastructure.Persistence.Repositories
         private readonly VendasWebDbContext _dbContext;
         private const int PAGE_SIZE = 5;
 
-        public PedidoRepository(VendasWebDbContext dbContext, IConfiguration configuration)
+        public PedidoRepository(VendasWebDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<PaginationResult<PedidoViewModel>> ListarPedidos(string query, int page)
+        public async Task<PaginationResult<Pedido>> ListarPedidos(string query, int page)
         {
-            List<PedidoViewModel> pedidosViewModel = new();
+            //List<PedidoViewModel> pedidosViewModel = new();
             PaginationResult<Pedido> pedidos = new();
 
-            IQueryable<Pedido> pedidosQ = _dbContext.Pedidos;
+            IQueryable<Pedido> pedidosQ = _dbContext.Pedidos
+                .Include(i => i.ItensPedidos)
+                .ThenInclude(p => p.Produto);
 
             if (!string.IsNullOrWhiteSpace(query))
             {
@@ -33,6 +32,8 @@ namespace VendasWebInfrastructure.Persistence.Repositories
                     p.NomeCliente.Contains(query) ||
                     p.EmailCliente.Contains(query)
                     );
+                    
+
                 pedidos = await pedidosQ.GetPaged<Pedido>(page, PAGE_SIZE);
             }
             else
@@ -42,74 +43,19 @@ namespace VendasWebInfrastructure.Persistence.Repositories
 
             if (pedidos == null) return null;
 
-            foreach (var pedido in pedidos.Data)
-            {
-
-                var itensDoPedido = await _dbContext.ItensPedidos.Where(p => p.IdPedido == pedido.IdPedido).ToListAsync();
-
-                List<ProdutoPedidoViewModel> produtosDoPedido = new();
-                foreach (var item in itensDoPedido)
-                {
-                    var produtoDoPedido = await _dbContext.Produtos.SingleOrDefaultAsync(p => p.IdProduto == item.IdProduto);
-                    var produto = new ProdutoPedidoViewModel(item.IdPedido, produtoDoPedido.IdProduto, produtoDoPedido.NomeProduto, produtoDoPedido.Valor, item.Quantidade);
-                    produtosDoPedido.Add(produto);
-                }
-                var valorTotal = Calculos.CalculaValorTotal(produtosDoPedido);
-
-                var projetoDetalhadoViewModel = new PedidoViewModel(
-                pedido.IdPedido,
-                pedido.NomeCliente,
-                pedido.EmailCliente,
-                pedido.Pago,
-                valorTotal,
-                produtosDoPedido,
-                pedido.DataCriacao
-                );
-                pedidosViewModel.Add(projetoDetalhadoViewModel);
-            }
-
-            var paginationPedidosViewModel = new PaginationResult<PedidoViewModel>
-                (
-                    pedidos.Page,
-                    pedidos.TotalPages,
-                    pedidos.PageSize,
-                    pedidos.ItemsCount,
-                    pedidosViewModel
-                );
-
-            return paginationPedidosViewModel;
+            return pedidos;            
         }
+        
 
-        public async Task<PedidoViewModel> ListarPedidoEspecífico(int idPedido)
+        public async Task<Pedido> ListarPedidoEspecífico(int idPedido)
         {
-            var pedido = await _dbContext.Pedidos.SingleOrDefaultAsync(p => p.IdPedido == idPedido);
+            var pedido = await _dbContext.Pedidos
+                .Include(i => i.ItensPedidos)
+                .ThenInclude(p => p.Produto)
+                .SingleOrDefaultAsync(p => p.IdPedido == idPedido);
 
             if (pedido == null) return null;
-
-            var itensDoPedido = await _dbContext.ItensPedidos.Where(p => p.IdPedido == idPedido).ToListAsync();
-
-            List<ProdutoPedidoViewModel> produtosDoPedido = new();
-            foreach (var item in itensDoPedido)
-            {
-                var produtoDoPedido = await _dbContext.Produtos.SingleOrDefaultAsync(p => p.IdProduto == item.IdProduto);
-                var produto = new ProdutoPedidoViewModel(item.IdPedido, produtoDoPedido.IdProduto, produtoDoPedido.NomeProduto, produtoDoPedido.Valor, item.Quantidade);
-                produtosDoPedido.Add(produto);
-            }
-
-            var valorTotal = Calculos.CalculaValorTotal(produtosDoPedido);
-
-
-            var projetoDetalhadoViewModel = new PedidoViewModel(
-                pedido.IdPedido,
-                pedido.NomeCliente,
-                pedido.EmailCliente,
-                pedido.Pago,
-                valorTotal,
-                produtosDoPedido,
-                pedido.DataCriacao
-                );
-
-            return projetoDetalhadoViewModel;
+            return pedido;            
         }
 
 

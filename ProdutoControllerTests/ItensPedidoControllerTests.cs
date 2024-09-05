@@ -9,11 +9,9 @@ using VendasWebApplication.Commands.ItensPedidoCommands.DeletarItensPedido;
 using VendasWebApplication.Commands.ItensPedidoCommands.EditarItensPedido;
 using VendasWebApplication.Queries.GetAllItensPedidos;
 using VendasWebApplication.Queries.GetItemPedidoById;
-using VendasWebApplication.Queries.GetPedidoById;
-using VendasWebApplication.Queries.GetProdutoById;
+using VendasWebApplication.ViewModels;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
-using VendasWebCore.ViewModels;
 
 namespace ControllerTests
 {

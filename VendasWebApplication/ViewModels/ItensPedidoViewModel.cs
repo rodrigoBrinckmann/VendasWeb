@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using VendasWebCore.Entities;
 
-namespace VendasWebCore.ViewModels
+namespace VendasWebApplication.ViewModels
 {
     public class ItensPedidoViewModel
     {

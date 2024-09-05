@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VendasWebCore.ViewModels
+namespace VendasWebApplication.ViewModels
 {
     public class ProdutoPedidoViewModel
     {

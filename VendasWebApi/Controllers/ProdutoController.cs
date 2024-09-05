@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VendasWebApplication.Commands.ProdutoCommands.CriarProduto;
@@ -11,8 +12,9 @@ using VendasWebApplication.Queries.GetProdutoById;
 
 namespace VendasWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
     public class ProdutoController : ControllerBase
     {        
         private readonly IMediator _mediator;
@@ -37,14 +39,13 @@ namespace VendasWebApi.Controllers
         /// Se colocado o parâmetro query, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro apareça        
         /// Se colocado o parâmetro page, ele trará a pagina correspondente a consulta, no caso de haver mais de uma página
         /// </returns>        
-        [HttpGet]
+        [HttpGet("getAllProducts")]        
         public async Task<IActionResult> GetAllProductsAsync([FromQuery] GetAllProdutosQuery getAllProductsQuery)
         {
             return Ok(await _mediator.Send(getAllProductsQuery));            
         }
                 
-        [HttpGet]
-        [Route("produtoEspecifico")]
+        [HttpGet("getProductById")]        
         public async Task<IActionResult> GetProdutoByIdAsync([FromQuery] GetProdutoByIdQuery query)
         {
             try
@@ -57,14 +58,14 @@ namespace VendasWebApi.Controllers
             }
         }
                 
-        [HttpPost]
+        [HttpPost("registerProduct")]
         public async Task<IActionResult> CadastrarProduto(CreateProdutoCommand request)
         {
             await _mediator.Send(request);
             return Ok("Produto Cadastrado com sucesso!");
         }
                 
-        [HttpPut]
+        [HttpPut("EditProduct")]
         public async Task<IActionResult> EditarProduto(UpdateProdutoCommand request)
         {
             try
@@ -78,7 +79,7 @@ namespace VendasWebApi.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("DeleteProduct")]
         public async Task<IActionResult> DeletarProduto([FromQuery] DeleteProdutoCommand request)
         {
             try

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
 using VendasWebCore.Repositories;
-using VendasWebCore.ViewModels;
+using VendasWebApplication.ViewModels;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VendasWebApplication.Queries.GetAllProdutos

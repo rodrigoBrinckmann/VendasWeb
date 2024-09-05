@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VendasWebCore.Repositories;
-using VendasWebCore.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Principal;
-using Azure.Core;
+using VendasWebCore.Entities;
 using VendasWebCore.Models;
-using VendasWebCore.ViewModels;
+using VendasWebCore.Repositories;
 
 namespace VendasWebInfrastructure.Persistence.Repositories
 {
@@ -19,7 +11,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
         private readonly VendasWebDbContext _dbContext;
         private const int PAGE_SIZE = 5;
 
-        public ProdutoRepository(VendasWebDbContext dbContext, IConfiguration configuration)
+        public ProdutoRepository(VendasWebDbContext dbContext)
         {
             _dbContext = dbContext;            
         }

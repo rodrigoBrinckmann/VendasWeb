@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VendasWebCore.ViewModels;
+using VendasWebApplication.ViewModels;
+
 
 namespace VendasWebApplication.Queries.GetPedidoById
 {
