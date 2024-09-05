@@ -43,10 +43,11 @@ namespace VendasWebApplication.Queries.GetPedidoById
                 }
             }
 
+            var userViewModel = new UserViewModel(pedido.Cliente.FullName, pedido.Cliente.Email);
+
             var projetoDetalhadoViewModel = new PedidoViewModel(
                 pedido.IdPedido,
-                pedido.NomeCliente,
-                pedido.EmailCliente,
+                userViewModel,
                 pedido.Pago,
                 valorTotal,
                 produtosDoPedido,

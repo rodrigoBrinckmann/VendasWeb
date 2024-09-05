@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VendasWebInfrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using VendasWebInfrastructure.Persistence;
 namespace VendasWebInfrastructure.Migrations
 {
     [DbContext(typeof(VendasWebDbContext))]
-    partial class VendasWebDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240905125038_UserRelationship")]
+    partial class UserRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +48,7 @@ namespace VendasWebInfrastructure.Migrations
 
                     b.HasIndex("IdProduto");
 
-                    b.ToTable("ItensPedidos", (string)null);
+                    b.ToTable("ItensPedidos");
                 });
 
             modelBuilder.Entity("VendasWebCore.Entities.Pedido", b =>
@@ -59,6 +62,16 @@ namespace VendasWebInfrastructure.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("EmailCliente")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NomeCliente")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
                     b.Property<bool>("Pago")
                         .HasColumnType("bit");
 
@@ -69,7 +82,7 @@ namespace VendasWebInfrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Pedidos", (string)null);
+                    b.ToTable("Pedidos");
                 });
 
             modelBuilder.Entity("VendasWebCore.Entities.Produto", b =>
@@ -96,7 +109,7 @@ namespace VendasWebInfrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Produtos", (string)null);
+                    b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("VendasWebCore.Entities.User", b =>
@@ -115,13 +128,11 @@ namespace VendasWebInfrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -133,7 +144,7 @@ namespace VendasWebInfrastructure.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("VendasWebCore.Entities.ItensPedido", b =>

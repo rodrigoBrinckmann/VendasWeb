@@ -12,27 +12,10 @@ namespace VendasWebApplication.Validators
     {
         public CriarPedidoCommandValidator()
         {
-            RuleFor(v => v.NomeCliente)
-                .MaximumLength(60)
-                .WithMessage("Nome cliente não pode exceder 60 posições");
-
-            RuleFor(v => v.NomeCliente)
+            RuleFor(v => v.UserId)
                 .NotEmpty()
                 .NotNull()
-                .WithMessage("Nome cliente é obrigatório");
-
-            RuleFor(v => v.EmailCliente)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("Email cliente é obrigatório");
-
-            RuleFor(v => v.EmailCliente)
-                .EmailAddress()
-                .WithMessage("Email cliente inválido");
-
-            RuleFor(v => v.EmailCliente)
-                .MaximumLength(60)
-                .WithMessage("Email cliente não pode exceder 60 posições");
+                .WithMessage("Cliente é obrigatório");            
         }
     }
 }

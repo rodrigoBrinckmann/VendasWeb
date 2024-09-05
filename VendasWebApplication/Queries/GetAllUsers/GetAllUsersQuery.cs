@@ -9,7 +9,7 @@ using VendasWebCore.Models;
 
 namespace VendasWebApplication.Queries.GetAllUsers
 {
-    public class GetAllUsersQuery : IRequest<PaginationResult<UserViewModel>>
+    public class GetAllUsersQuery : IRequest<PaginationResult<UserDetailedViewModel>>
     {
         public string? Query { get; set; }
         public int Page { get; set; } = 1;

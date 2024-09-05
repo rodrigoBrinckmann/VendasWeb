@@ -17,6 +17,10 @@ namespace VendasWebCore.Entities
         public decimal Valor { get; private set; }
         [JsonIgnore]
         public List<ItensPedido>? ItensPedidos { get; private set; }
+        public int UserId { get; set; }
+        [JsonIgnore]
+        public User User { get; set; }
+
 
         public Produto()
         {            

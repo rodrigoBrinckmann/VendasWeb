@@ -2,10 +2,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using VendasWebApplication.Commands.ChangePasswordCommand;
 using VendasWebApplication.Commands.CreateUserCommand;
 using VendasWebApplication.Commands.LoginUserCommands;
+using VendasWebApplication.Commands.UpdateUserCommand;
 using VendasWebApplication.Queries.GetAllProdutos;
 using VendasWebApplication.Queries.GetAllUsers;
+using VendasWebApplication.Queries.GetUserById;
 
 namespace VendasWebApi.Controllers
 {
@@ -27,6 +30,47 @@ namespace VendasWebApi.Controllers
             var id = await _mediator.Send(request);
             return Ok($"Usuário {id} Cadastrado com sucesso!");
             //return CreatedAtAction(nameof(GetById), new { id = id }, command);
+        }        
+
+        [HttpGet("getUsers")]
+        [Authorize(Roles ="ADMIN")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQuery getAllUsersQuery)
+        {
+            var user = await _mediator.Send(getAllUsersQuery);
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpGet("getUsersByEmail")]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> GetUsersByEmail([FromQuery] GetUserByEmailQuery getUserByEmail)
+        {
+            var user = await _mediator.Send(getUserByEmail);
+
+            if (user == null)
+            {
+                return NotFound("Usuário não encontrado");
+            }
+            return Ok(user);
+        }
+
+        [HttpPut("updateUser")]
+        [Authorize(Roles = "ADMIN, Sales")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand request)
+        {            
+            try
+            {
+                var user = await _mediator.Send(request);                
+                return Ok(user);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("login")]
@@ -38,20 +82,38 @@ namespace VendasWebApi.Controllers
             {
                 return BadRequest("Usuário não encontrado");
             }
-            return Ok(user);            
+            return Ok(user);
         }
 
-        [HttpGet("getUsers")]
-        //[Authorize(Roles ="ADMIN")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQuery getAllUsersQuery)
-        {
-            var user = await _mediator.Send(getAllUsersQuery);
-            
-            if (user == null)
+        //[HttpPut("retrievePassword")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand request)
+        //{
+        //vai mandar um email com o novo password para o usuário
+        //    try
+        //    {
+        //        var user = await _mediator.Send(request);
+        //        return Ok(user);
+        //    }
+        //    catch (KeyNotFoundException ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        [HttpPut("changePassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand request)
+        {            
+            try
             {
-                return NotFound();
+                var user = await _mediator.Send(request);
+                return Ok(user);
             }
-            return Ok(user);
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

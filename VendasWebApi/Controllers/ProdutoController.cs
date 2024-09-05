@@ -13,8 +13,7 @@ using VendasWebApplication.Queries.GetProdutoById;
 namespace VendasWebApi.Controllers
 {
     [Route("api/")]
-    [ApiController]
-    [Authorize(Roles = "ADMIN")]
+    [ApiController]    
     public class ProdutoController : ControllerBase
     {        
         private readonly IMediator _mediator;
@@ -39,13 +38,15 @@ namespace VendasWebApi.Controllers
         /// Se colocado o parâmetro query, ele servirá como um filtro, trazendo todas as ocorrências de banco em que esse filtro apareça        
         /// Se colocado o parâmetro page, ele trará a pagina correspondente a consulta, no caso de haver mais de uma página
         /// </returns>        
-        [HttpGet("getAllProducts")]        
+        [HttpGet("getAllProducts")]
+        [Authorize(Roles = "ADMIN, Sales")]
         public async Task<IActionResult> GetAllProductsAsync([FromQuery] GetAllProdutosQuery getAllProductsQuery)
         {
             return Ok(await _mediator.Send(getAllProductsQuery));            
         }
                 
-        [HttpGet("getProductById")]        
+        [HttpGet("getProductById")]
+        [Authorize(Roles = "ADMIN, Sales")]
         public async Task<IActionResult> GetProdutoByIdAsync([FromQuery] GetProdutoByIdQuery query)
         {
             try
@@ -59,6 +60,7 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpPost("registerProduct")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> CadastrarProduto(CreateProdutoCommand request)
         {
             await _mediator.Send(request);
@@ -66,6 +68,7 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpPut("EditProduct")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> EditarProduto(UpdateProdutoCommand request)
         {
             try
@@ -80,6 +83,7 @@ namespace VendasWebApi.Controllers
         }
 
         [HttpDelete("DeleteProduct")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeletarProduto([FromQuery] DeleteProdutoCommand request)
         {
             try

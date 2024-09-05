@@ -17,20 +17,20 @@ namespace VendasWebInfrastructure.Persistence.Repositories
         }
 
         public async Task<PaginationResult<Pedido>> ListarPedidos(string query, int page)
-        {
-            //List<PedidoViewModel> pedidosViewModel = new();
+        {            
             PaginationResult<Pedido> pedidos = new();
 
             IQueryable<Pedido> pedidosQ = _dbContext.Pedidos
                 .Include(i => i.ItensPedidos)
-                .ThenInclude(p => p.Produto);
+                .ThenInclude(p => p.Produto)
+                .ThenInclude(u => u.User);
 
             if (!string.IsNullOrWhiteSpace(query))
             {
                 pedidosQ = pedidosQ
                     .Where(p =>
-                    p.NomeCliente.Contains(query) ||
-                    p.EmailCliente.Contains(query)
+                    p.Cliente.FullName.Contains(query) ||
+                    p.Cliente.Email.Contains(query)
                     );
                     
 
@@ -50,8 +50,9 @@ namespace VendasWebInfrastructure.Persistence.Repositories
         public async Task<Pedido> ListarPedidoEspecífico(int idPedido)
         {
             var pedido = await _dbContext.Pedidos
-                .Include(i => i.ItensPedidos)
+                .Include(i => i.ItensPedidos)                
                 .ThenInclude(p => p.Produto)
+                 .ThenInclude(u => u.User)
                 .SingleOrDefaultAsync(p => p.IdPedido == idPedido);
 
             if (pedido == null) return null;
@@ -76,28 +77,13 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             catch (DbUpdateConcurrencyException e)
             {
                 throw new DbUpdateConcurrencyException("Pedido não existente no banco de dados", e);
-            }                
-        }
-
-        public async Task<Pedido> EditarPedidoAsync(int id, Pedido pedido)
-        {
-            try
-            {
-                var pedidoFinal = await _dbContext.Pedidos.SingleOrDefaultAsync(p => p.IdPedido == id);
-                if (pedidoFinal is not null)
-                {
-                    pedidoFinal.Update(pedido, pedidoFinal);
-                    await SaveChangesASync();
-                    return pedidoFinal;
-                }
             }
-            catch (KeyNotFoundException e)
+            catch (Exception e)
             {
-                throw new KeyNotFoundException("Pedido não existente no banco de dados - Não atualizado", e);
+                throw new Exception("Este pedido não pode ser excluído", e);
             }
-            return pedido;
         }
-
+        
         public async Task<Pedido> RegistrarPagamentoPedidoAsync(int id, bool pago)
         {
             try

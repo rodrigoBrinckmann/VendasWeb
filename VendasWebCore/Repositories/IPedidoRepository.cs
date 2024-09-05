@@ -7,8 +7,7 @@ namespace VendasWebCore.Repositories
     {        
         Task<PaginationResult<Pedido>> ListarPedidos(string query, int page);
         Task<Pedido> ListarPedidoEspecífico(int identity);
-        Task CadastrarPedidoAsync(Pedido produto);
-        Task<Pedido> EditarPedidoAsync(int id, Pedido produto);
+        Task CadastrarPedidoAsync(Pedido produto);        
         Task<Pedido> RegistrarPagamentoPedidoAsync(int id, bool pago);
         Task DeletarPedido(int identity);        
         Task SaveChangesASync();

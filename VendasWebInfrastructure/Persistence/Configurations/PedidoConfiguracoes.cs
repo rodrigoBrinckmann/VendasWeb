@@ -11,9 +11,10 @@ namespace VendasWebInfrastructure.Persistence.Configurations
             builder
             .HasKey(p => p.IdPedido);
 
-            builder.Property(p => p.NomeCliente).HasMaxLength(60);
-            builder.Property(p => p.EmailCliente).HasMaxLength(50);
-
+            builder
+               .HasOne(p => p.Cliente)
+               .WithMany(p => p.Pedidos)
+               .HasForeignKey(p => p.UserId);
         }
     }
 }

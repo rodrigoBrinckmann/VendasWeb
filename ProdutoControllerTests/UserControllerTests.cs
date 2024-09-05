@@ -8,10 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VendasWebApi.Controllers;
+using VendasWebApplication.Commands.ChangePasswordCommand;
 using VendasWebApplication.Commands.CreateUserCommand;
 using VendasWebApplication.Commands.LoginUserCommands;
+using VendasWebApplication.Commands.UpdateUserCommand;
 using VendasWebApplication.Queries.GetAllUsers;
 using VendasWebApplication.Queries.GetProdutoById;
+using VendasWebApplication.Queries.GetUserById;
 using VendasWebApplication.ViewModels;
 using VendasWebCore.Models;
 
@@ -50,9 +53,9 @@ namespace ControllersTests
         {
             //arrange
             GetAllUsersQuery query = new();
-            PaginationResult<UserViewModel> paginationViewModel = new();
+            PaginationResult<UserDetailedViewModel> paginationViewModel = new();
 
-            _mediatrMock.Setup(m => m.Send<PaginationResult<UserViewModel>>(It.IsAny<GetAllUsersQuery>(), new CancellationToken())).ReturnsAsync(paginationViewModel);
+            _mediatrMock.Setup(m => m.Send<PaginationResult<UserDetailedViewModel>>(It.IsAny<GetAllUsersQuery>(), new CancellationToken())).ReturnsAsync(paginationViewModel);
 
             //act
             var response = await userController.GetAllUsers(query);
@@ -60,7 +63,7 @@ namespace ControllersTests
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
-            _mediatrMock.Verify(x => x.Send<PaginationResult<UserViewModel>>(It.IsAny<GetAllUsersQuery>(), new CancellationToken()), Times.Once());
+            _mediatrMock.Verify(x => x.Send<PaginationResult<UserDetailedViewModel>>(It.IsAny<GetAllUsersQuery>(), new CancellationToken()), Times.Once());
         }
 
         [Fact(DisplayName = "UserControllerTests - Login")]
@@ -79,6 +82,60 @@ namespace ControllersTests
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
             result.Value.Should().NotBeNull();
             _mediatrMock.Verify(x => x.Send<LoginUserViewModel>(It.IsAny<LoginUserCommand>(), new CancellationToken()), Times.Once());
+        }
+
+        [Fact(DisplayName = "UserControllerTests - GetUsersByEmail")]
+        public async Task GetUsersByEmail()
+        {
+            //arrange
+            GetUserByEmailQuery query = new();
+            List<UserDetailedViewModel> userDetailedViewModelList = new();
+
+            _mediatrMock.Setup(m => m.Send<List<UserDetailedViewModel>>(It.IsAny<GetUserByEmailQuery>(), new CancellationToken())).ReturnsAsync(userDetailedViewModelList);
+
+            //act
+            var response = await userController.GetUsersByEmail(query);
+
+            //assert
+            var result = response.Should().BeOfType<OkObjectResult>().Subject;
+            result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<List<UserDetailedViewModel>>(It.IsAny<GetUserByEmailQuery>(), new CancellationToken()), Times.Once());
+        }
+
+        [Fact(DisplayName = "UserControllerTests - UpdateUser")]
+        public async Task UpdateUser()
+        {
+            //arrange
+            UpdateUserCommand command = new();
+            UserDetailedViewModel userDetailedViewModelList = new("Name","email");
+
+            _mediatrMock.Setup(m => m.Send<UserDetailedViewModel>(It.IsAny<UpdateUserCommand>(), new CancellationToken())).ReturnsAsync(userDetailedViewModelList);
+
+            //act
+            var response = await userController.UpdateUser(command);
+
+            //assert
+            var result = response.Should().BeOfType<OkObjectResult>().Subject;
+            result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<UserDetailedViewModel>(It.IsAny<UpdateUserCommand>(), new CancellationToken()), Times.Once());
+        }
+
+
+        [Fact(DisplayName = "UserControllerTests - ChangePassword")]
+        public async Task ChangePassword()
+        {
+            //arrange
+            ChangePasswordCommand command = new();
+
+            _mediatrMock.Setup(m => m.Send<Unit>(It.IsAny<ChangePasswordCommand>(), new CancellationToken()));
+
+            //act
+            var response = await userController.ChangePassword(command);
+
+            //assert
+            var result = response.Should().BeOfType<OkObjectResult>().Subject;
+            result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<Unit>(It.IsAny<ChangePasswordCommand>(), new CancellationToken()), Times.Once());
         }
 
 

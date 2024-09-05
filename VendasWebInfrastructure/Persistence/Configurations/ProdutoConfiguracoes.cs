@@ -14,6 +14,11 @@ namespace VendasWebInfrastructure.Persistence.Configurations
 
             builder.Property(p => p.NomeProduto).HasMaxLength(20);
             builder.Property(p => p.Valor).HasPrecision(10, 2);
+
+            builder
+               .HasOne(p => p.User)
+               .WithMany(p => p.Produtos)
+               .HasForeignKey(p => p.UserId);
         }
     }
 }

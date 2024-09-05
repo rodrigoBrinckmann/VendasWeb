@@ -1,9 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VendasWebApplication.Commands.PedidoCommands.CriarPedido;
 using VendasWebApplication.Commands.PedidoCommands.DeletarPedido;
-using VendasWebApplication.Commands.PedidoCommands.EditarPedido;
 using VendasWebApplication.Commands.PedidoCommands.RegistraPagamento;
 using VendasWebApplication.Queries.GetAllPedidos;
 using VendasWebApplication.Queries.GetPedidoById;
@@ -39,6 +39,7 @@ namespace VendasWebApi.Controllers
         /// apareça ou no nome do cliente ou no email do cliente
         /// </returns>
         [HttpGet("getAllOrders")]
+        [Authorize(Roles ="ADMIN")]
         public async Task<IActionResult> GetAllOrdersAsync([FromQuery] GetAllPedidosQuery getAllPedidosQuery)
         {            
             var listaPedidos = await _mediator.Send(getAllPedidosQuery);
@@ -46,7 +47,8 @@ namespace VendasWebApi.Controllers
         }
 
         
-        [HttpGet("getOrderById")]        
+        [HttpGet("getOrderById")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetOrderByIdAsync([FromQuery] GetPedidoByIdQuery query)
         {
             var pedido = await _mediator.Send(query);            
@@ -56,29 +58,16 @@ namespace VendasWebApi.Controllers
         }
 
         
-        [HttpPost("registerOrder")]        
+        [HttpPost("registerOrder")]
+        [Authorize(Roles = "ADMIN, Sales")]
         public async Task<IActionResult> CadastrarPedido([FromBody] CriarPedidoCommand pedido)
         {
             var id = await _mediator.Send(pedido);            
             return Ok($"Pedido {id} Cadastrado com sucesso!");
-        }
+        }                
 
-        
-        [HttpPut("editOrder")]
-        public async Task<IActionResult> EditarPedido(EditarPedidoCommand editCommand)
-        {
-            try
-            {                
-                var pedidofinal = await _mediator.Send(editCommand);
-                return Ok(pedidofinal);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("registerPayment")]        
+        [HttpPut("registerPayment")]
+        [Authorize(Roles = "ADMIN, Sales")]
         public async Task<IActionResult> RegistrarPagamento(RegistraPagamentoCommand pagamentoCommand)
         {
             try
@@ -93,6 +82,7 @@ namespace VendasWebApi.Controllers
         }
 
         [HttpDelete("deleteOrder")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeletarPedido([FromQuery] DeletarPedidoCommand deleteCommand)
         {
             try
@@ -101,6 +91,10 @@ namespace VendasWebApi.Controllers
                 return Ok("Pedido deletado com sucesso!");
             }
             catch (DbUpdateConcurrencyException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

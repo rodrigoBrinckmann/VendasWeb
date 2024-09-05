@@ -15,6 +15,9 @@ namespace VendasWebInfrastructure.Persistence.Configurations
         {
             builder
             .HasKey(p => p.UserId);
+
+            builder.Property(p => p.FullName).HasMaxLength(60);
+            builder.Property(p => p.Email).HasMaxLength(50);
         }
     }
 }

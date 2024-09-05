@@ -10,8 +10,9 @@ namespace VendasWebApplication.Commands.PedidoCommands.CriarPedido
 {
     public class CriarPedidoCommand : IRequest<int>
     {
-        public string NomeCliente { get; set; } = string.Empty;
-        public string EmailCliente { get; set; } = string.Empty;
+        //public string NomeCliente { get; set; } = string.Empty;
+        //public string EmailCliente { get; set; } = string.Empty;
+        public int UserId { get; set; }
         public DateTime DataCriacao { get; set; } = DateTime.Now;
         public bool Pago { get; set; } = false;
         public List<ItensPedido>? ItensPedidos { get; set; }        

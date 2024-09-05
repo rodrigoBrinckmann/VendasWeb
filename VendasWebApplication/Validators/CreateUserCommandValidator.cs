@@ -13,18 +13,31 @@ namespace VendasWebApplication.Validators
     {
         public CreateUserCommandValidator()
         {
-            RuleFor(p => p.Email)
-                .EmailAddress()
-                .WithMessage("E-mail não válido!");
-
-            RuleFor(p => p.Password)
-                .Must(ValidPassword)
-                .WithMessage("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial");
-
             RuleFor(p => p.FullName)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Nome é obrigatório!");
+
+            RuleFor(v => v.Email)
+                .NotEmpty()
+                .NotNull()
+                .WithMessage("Email cliente é obrigatório");
+
+            RuleFor(p => p.Email)
+                .EmailAddress()
+                .WithMessage("E-mail não válido!");
+
+            RuleFor(p => p.FullName)
+                .MaximumLength(60)
+                .WithMessage("Nome cliente não pode exceder 60 posições");
+
+            RuleFor(v => v.Email)
+                .MaximumLength(60)
+                .WithMessage("Email cliente não pode exceder 60 posições");
+
+            RuleFor(p => p.Password)
+                .Must(ValidPassword)
+                .WithMessage("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial");
         }
 
         public bool ValidPassword(string password)

@@ -6,13 +6,12 @@ using Moq;
 using VendasWebApi.Controllers;
 using VendasWebApplication.Commands.PedidoCommands.CriarPedido;
 using VendasWebApplication.Commands.PedidoCommands.DeletarPedido;
-using VendasWebApplication.Commands.PedidoCommands.EditarPedido;
 using VendasWebApplication.Commands.PedidoCommands.RegistraPagamento;
 using VendasWebApplication.Queries.GetAllPedidos;
 using VendasWebApplication.Queries.GetPedidoById;
+using VendasWebApplication.ViewModels;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
-using VendasWebApplication.ViewModels;
 
 namespace ControllerTests
 {
@@ -23,9 +22,10 @@ namespace ControllerTests
 
         [Fact(DisplayName = "PedidoControllerTests - Returns ok with a single order")]
         public async Task Get_ById()
-        {
+        {            
             //arrange            
-            PedidoViewModel responsePedido = new PedidoViewModel(1,"Teste","email@email.com",true,10m,new List<ProdutoPedidoViewModel>(),DateTime.Now);
+            UserViewModel user = new UserViewModel("Teste","Test@mail.com");
+            PedidoViewModel responsePedido = new PedidoViewModel(1, user, true,10m,new List<ProdutoPedidoViewModel>(),DateTime.Now);
             _mediatrMock.Setup(s => s.Send(It.IsAny<GetPedidoByIdQuery>(), new CancellationToken())).ReturnsAsync(responsePedido);            
             var controller = GetController();
 
@@ -41,7 +41,8 @@ namespace ControllerTests
         public async Task Get_ById_Doesnt_exists()
         {
             //arrange            
-            PedidoViewModel responsePedido = new PedidoViewModel(1, "Teste", "email@email.com", true, 10m, new List<ProdutoPedidoViewModel>(), DateTime.Now);
+            UserViewModel user = new UserViewModel("Teste", "Test@mail.com");
+            PedidoViewModel responsePedido = new PedidoViewModel(1, user, true, 10m, new List<ProdutoPedidoViewModel>(), DateTime.Now);
             _mediatrMock.Setup(s => s.Send(It.IsAny<GetPedidoByIdQuery>(), new CancellationToken()));
             var controller = GetController();
 
@@ -87,25 +88,7 @@ namespace ControllerTests
             result.Value.Should().NotBeNull();
             _mediatrMock.Verify(x => x.Send(It.IsAny<CriarPedidoCommand>(), new CancellationToken()), Times.Once());
         }
-
-        [Fact(DisplayName = "PedidoControllerTests - Edit an order")]
-        public async Task Put()
-        {
-            //arrange            
-            EditarPedidoCommand pedido = new EditarPedidoCommand();
-            var responseProduto = new Pedido();
-            _mediatrMock.Setup(m => m.Send(It.IsAny<EditarPedidoCommand>(), new CancellationToken())).ReturnsAsync(responseProduto);
-            var controller = GetController();
-
-            //act
-            var response = await controller.EditarPedido(pedido);
-
-            //assert
-            var result = response.Should().BeOfType<OkObjectResult>().Subject;
-            result.Value.Should().NotBeNull();
-            _mediatrMock.Verify(x => x.Send(It.IsAny<EditarPedidoCommand>(), new CancellationToken()), Times.Once());
-        }
-
+        
         [Fact(DisplayName = "PedidoControllerTests - Register a payment")]
         public async Task RegisterPayment()
         {
@@ -140,24 +123,7 @@ namespace ControllerTests
             result.Value.Should().NotBeNull();
             _mediatrMock.Verify(x => x.Send(It.IsAny<DeletarPedidoCommand>(), new CancellationToken()), Times.Once());
         }
-
-        [Fact(DisplayName = "PedidoControllerTests - Edit an order - Exception")]
-        public async Task Put_NOK()
-        {
-            //arrange            
-            EditarPedidoCommand pedido = new EditarPedidoCommand();
-            var expectedException = new KeyNotFoundException("Erro");
-            _mediatrMock.Setup(m => m.Send(It.IsAny<EditarPedidoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);
-            
-            var controller = GetController();
-
-            //act
-            var response = await controller.EditarPedido(pedido);
-
-            //assert            
-            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
-        }
-
+        
         [Fact(DisplayName = "PedidoControllerTests - Register Payment - Exception")]
         public async Task Put_RegistraPagamento_NOK()
         {

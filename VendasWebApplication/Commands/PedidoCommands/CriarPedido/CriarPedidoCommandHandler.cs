@@ -20,7 +20,7 @@ namespace VendasWebApplication.Commands.PedidoCommands.CriarPedido
         }
         public async Task<int> Handle(CriarPedidoCommand request, CancellationToken cancellationToken)
         {
-            var pedido = new Pedido(request.NomeCliente, request.EmailCliente, request.DataCriacao, request.Pago, request.ItensPedidos);
+            var pedido = new Pedido(request.UserId, request.DataCriacao, request.Pago, request.ItensPedidos);
             await _pedidoRepository.CadastrarPedidoAsync(pedido);
             return pedido.IdPedido;
         }

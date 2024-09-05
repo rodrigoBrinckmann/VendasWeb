@@ -15,13 +15,13 @@ namespace VendasWebInfrastructure.Persistence.Configurations
                .HasOne(p => p.Pedido)
                .WithMany(p => p.ItensPedidos)
                .HasForeignKey(p => p.IdPedido)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasOne(p => p.Produto)
                 .WithMany(p => p.ItensPedidos)
                 .HasForeignKey(p => p.IdProduto)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

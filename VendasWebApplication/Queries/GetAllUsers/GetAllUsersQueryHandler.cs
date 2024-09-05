@@ -11,7 +11,7 @@ using VendasWebCore.Repositories;
 
 namespace VendasWebApplication.Queries.GetAllUsers
 {
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PaginationResult<UserViewModel>>
+    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PaginationResult<UserDetailedViewModel>>
     {
         private readonly IUserRepository _userRepository;
         public GetAllUsersQueryHandler(IUserRepository userRepository)
@@ -19,16 +19,16 @@ namespace VendasWebApplication.Queries.GetAllUsers
             _userRepository = userRepository;
         }
 
-        public async Task<PaginationResult<UserViewModel>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<PaginationResult<UserDetailedViewModel>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var paginatedResults = await _userRepository.GetListOfUsers(request.Query, request.Page);
             
             var userViewModel = paginatedResults
                 .Data
-                .Select(u => new UserViewModel(u.UserId,u.FullName,u.Email,u.CreatedAt.ToString(CultureInfo.CreateSpecificCulture("pt-BR")), u.Active,u.Role))
+                .Select(u => new UserDetailedViewModel(u.UserId,u.FullName,u.Email,u.CreatedAt.ToString(CultureInfo.CreateSpecificCulture("pt-BR")), u.Active,u.Role))
                 .ToList();
 
-            var paginationResult = new PaginationResult<UserViewModel>(
+            var paginationResult = new PaginationResult<UserDetailedViewModel>(
                paginatedResults.Page,
                paginatedResults.TotalPages,
                paginatedResults.PageSize,

@@ -14,27 +14,31 @@ namespace VendasWebCore.Entities
 
         [JsonIgnore]
         public int IdPedido { get; set; }        
-        public string NomeCliente { get; private set; } = string.Empty;        
-        public string EmailCliente { get; private set; } = string.Empty;
+        //public string NomeCliente { get; private set; } = string.Empty;        
+        //public string EmailCliente { get; private set; } = string.Empty;
         public DateTime DataCriacao { get; private set; }
         public bool Pago { get; private set; }
         public List<ItensPedido>? ItensPedidos { get; set; }
+        public int UserId { get; set; }
+        [JsonIgnore]
+        public User Cliente { get; set; }
 
         public Pedido()
         {
             
         }
         
-        public Pedido(string nomeCliente, string emailCliente)
-        {
-            NomeCliente = nomeCliente;
-            EmailCliente = emailCliente;
-        }
+        //public Pedido(string nomeCliente, string emailCliente)
+        //{
+        //    NomeCliente = nomeCliente;
+        //    EmailCliente = emailCliente;
+        //}
 
-        public Pedido(string nomeCliente, string emailCliente, DateTime dataCriacao, bool pago, List<ItensPedido> itensPedidos)
+        public Pedido(int userId, DateTime dataCriacao, bool pago, List<ItensPedido> itensPedidos)
         {
-            NomeCliente = nomeCliente;
-            EmailCliente = emailCliente;
+            //NomeCliente = nomeCliente;
+            //EmailCliente = emailCliente;
+            UserId = userId;
             DataCriacao = dataCriacao;
             Pago = pago;
             ItensPedidos = itensPedidos;
@@ -42,20 +46,21 @@ namespace VendasWebCore.Entities
 
         public void Update(Pedido pedidoNew, Pedido pedidoOld)
         {
-            if (!string.IsNullOrEmpty(pedidoNew.NomeCliente))
-            {
-                if (pedidoOld.NomeCliente != pedidoNew.NomeCliente)
-                {
-                    NomeCliente = pedidoNew.NomeCliente;
-                }
-            }
-            if (!string.IsNullOrEmpty(pedidoNew.EmailCliente))
-            {
-                if (pedidoOld.EmailCliente != pedidoNew.EmailCliente)
-                {
-                    EmailCliente = pedidoNew.EmailCliente;
-                }
-            }                        
+            //AJUSTAR
+            //if (!string.IsNullOrEmpty(pedidoNew.NomeCliente))
+            //{
+            //    if (pedidoOld.NomeCliente != pedidoNew.NomeCliente)
+            //    {
+            //        NomeCliente = pedidoNew.NomeCliente;
+            //    }
+            //}
+            //if (!string.IsNullOrEmpty(pedidoNew.EmailCliente))
+            //{
+            //    if (pedidoOld.EmailCliente != pedidoNew.EmailCliente)
+            //    {
+            //        EmailCliente = pedidoNew.EmailCliente;
+            //    }
+            //}                        
         }
 
         public void UpdatePagamento(bool pagamento)

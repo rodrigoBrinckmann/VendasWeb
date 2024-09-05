@@ -28,10 +28,28 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             await _dbContext.Users.AddAsync(user);
             await SaveChangesASync();
         }
-
-        public Task EditarUserAsync(User user)
+        
+        public async Task<User> EditarUserAsync(User user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userDB = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == user.UserId);
+                if (userDB is not null)
+                {
+                    userDB.UpdateUsuario(user);
+                    await SaveChangesASync();
+                    return userDB;
+                }
+                else
+                {
+                    throw new KeyNotFoundException();
+                }
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException("Usuário não existente no banco de dados - Não atualizado", e);
+            }
+
         }
 
         public async Task<PaginationResult<User>> GetListOfUsers(string query, int page)
@@ -47,12 +65,39 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             }
 
             return await users.GetPaged<User>(page, PAGE_SIZE);
-
         }
 
-        public Task<User> GetUserByEmail(string email)
+        public async Task<List<User>> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            IQueryable<User> users = _dbContext.Users;
+            return users.Where(e => e.Email.Contains(email)).ToList();                
+        }
+
+        public async Task ChangePasswordAsync(string email, string oldPassword, string newPassword)
+        {
+            try
+            {
+                var userDB = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == oldPassword);
+                if (userDB is not null)
+                {
+                    userDB.UpdatePassword(newPassword);
+                    await SaveChangesASync();                    
+                }
+                else
+                {
+                    throw new KeyNotFoundException();
+                }
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException("Usuário inválido - Não atualizado", e);
+            }
+        }
+        
+        public async Task<User> GetUserByEmailAndPasswordAsync(string email, string passwordHash)
+        {
+            return await _dbContext.Users.
+                SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
         }
 
         public async Task SaveChangesASync()
@@ -60,10 +105,5 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserByEmailAndPasswordAsync(string email, string passwordHash)
-        {
-            return await _dbContext.Users.
-                SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
-        }
     }
 }
