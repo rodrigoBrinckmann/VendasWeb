@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VendasWebApplication.ViewModels;
 
-namespace VendasWebApplication.Queries.GetUserById
+namespace VendasWebApplication.Queries.GetUserByEmail
 {
     public class GetUserByEmailQuery : IRequest<List<UserDetailedViewModel>>
     {

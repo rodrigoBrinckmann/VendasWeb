@@ -2,21 +2,16 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VendasWebApi.Controllers;
 using VendasWebApplication.Commands.ChangePasswordCommand;
 using VendasWebApplication.Commands.CreateUserCommand;
 using VendasWebApplication.Commands.LoginUserCommands;
 using VendasWebApplication.Commands.UpdateUserCommand;
 using VendasWebApplication.Queries.GetAllUsers;
-using VendasWebApplication.Queries.GetProdutoById;
-using VendasWebApplication.Queries.GetUserById;
 using VendasWebApplication.ViewModels;
 using VendasWebCore.Models;
+using VendasWebApplication.Queries.GetUserByEmail;
+using VendasWebApplication.Commands.RetrievePasswordCommand;
 
 namespace ControllersTests
 {
@@ -138,6 +133,22 @@ namespace ControllersTests
             _mediatrMock.Verify(x => x.Send<Unit>(It.IsAny<ChangePasswordCommand>(), new CancellationToken()), Times.Once());
         }
 
+        [Fact(DisplayName = "UserControllerTests - RetrievePassword")]
+        public async Task RetrievePassword()
+        {
+            //arrange
+            RetrievePasswordCommand command = new();
+            List<UserDetailedViewModel> userList = [new UserDetailedViewModel("TESTE","email")];
 
+            _mediatrMock.Setup(m => m.Send<List<UserDetailedViewModel>>(It.IsAny<RetrievePasswordCommand>(), new CancellationToken())).ReturnsAsync(userList);
+
+            //act
+            var response = await userController.RetrievePassword(command);
+
+            //assert
+            var result = response.Should().BeOfType<OkObjectResult>().Subject;
+            result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<List<UserDetailedViewModel>>(It.IsAny<RetrievePasswordCommand>(), new CancellationToken()), Times.Once());
+        }
     }
 }

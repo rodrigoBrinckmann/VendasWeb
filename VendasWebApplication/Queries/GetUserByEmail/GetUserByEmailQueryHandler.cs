@@ -9,7 +9,7 @@ using VendasWebApplication.ViewModels;
 using VendasWebCore.Models;
 using VendasWebCore.Repositories;
 
-namespace VendasWebApplication.Queries.GetUserById
+namespace VendasWebApplication.Queries.GetUserByEmail
 {
     public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, List<UserDetailedViewModel>>
     {

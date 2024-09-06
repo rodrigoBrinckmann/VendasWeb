@@ -18,7 +18,7 @@ namespace VendasWebInfrastructure.Persistence.Repositories
         private readonly VendasWebDbContext _dbContext;
         private const int PAGE_SIZE = 5;
 
-        public UserRepository(VendasWebDbContext dbContext, IConfiguration configuration)
+        public UserRepository(VendasWebDbContext dbContext)
         {
             _dbContext = dbContext;
         }
