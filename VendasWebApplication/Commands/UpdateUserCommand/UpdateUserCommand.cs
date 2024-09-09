@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VendasWebApplication.ViewModels;
+using VendasWebCore.Enums;
 
 namespace VendasWebApplication.Commands.UpdateUserCommand
 {
@@ -14,6 +15,6 @@ namespace VendasWebApplication.Commands.UpdateUserCommand
         public string? FullName { get; set; }
         public string? Email { get; set; }
         public bool Active { get; set; } = true;
-        public string? Role { get; set; }
+        public Roles Role { get; set; }
     }
 }

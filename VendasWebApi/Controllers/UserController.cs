@@ -32,7 +32,7 @@ namespace VendasWebApi.Controllers
         }        
 
         [HttpGet("getUsers")]
-        [Authorize(Roles ="ADMIN")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQuery getAllUsersQuery)
         {
             var user = await _mediator.Send(getAllUsersQuery);
@@ -45,7 +45,7 @@ namespace VendasWebApi.Controllers
         }
 
         [HttpGet("getUsersByEmail")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsersByEmail([FromQuery] GetUserByEmailQuery getUserByEmail)
         {
             var user = await _mediator.Send(getUserByEmail);
@@ -58,7 +58,7 @@ namespace VendasWebApi.Controllers
         }
 
         [HttpPut("updateUser")]
-        [Authorize(Roles = "ADMIN, Sales")]
+        [Authorize(Roles = "Admin, Sales")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand request)
         {            
             try

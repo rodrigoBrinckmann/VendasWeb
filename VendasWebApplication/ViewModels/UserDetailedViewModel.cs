@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VendasWebCore.Enums;
 
 namespace VendasWebApplication.ViewModels
 {
@@ -30,6 +31,6 @@ namespace VendasWebApplication.ViewModels
             CreatedAt = createdAt; //.ToString(CultureInfo.CreateSpecificCulture("pt-BR"));
             Active = active;
             Role = role;
-        }        
+        }
     }
 }

@@ -28,9 +28,12 @@ builder.Services.AddControllers(options => options.Filters.Add(typeof(Validation
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddDbContext<VendasWebDbContext>
+//    (options => options.UseSqlServer
+//    (builder.Configuration.GetConnectionString("Default")));
+
 builder.Services.AddDbContext<VendasWebDbContext>
-    (options => options.UseSqlServer
-    (builder.Configuration.GetConnectionString("Default")));
+    (options => options.UseInMemoryDatabase("tst"));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddTransient<IEmailService, EmailSenderService>();

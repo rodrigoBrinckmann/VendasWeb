@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VendasWebCore.Enums;
 
 namespace VendasWebCore.Entities
 {
@@ -48,10 +49,7 @@ namespace VendasWebCore.Entities
             {
                 Email = user.Email;
             }            
-            if (!string.IsNullOrWhiteSpace(user.Role))
-            {
-                Role = user.Role;
-            }
+            Role = user.Role;            
             Active = user.Active;
         }
 

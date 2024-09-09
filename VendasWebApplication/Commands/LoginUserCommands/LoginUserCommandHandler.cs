@@ -31,7 +31,7 @@ namespace VendasWebApplication.Commands.LoginUserCommands
             {
                 return null;
             }
-            var token = _authService.GenerateJwtToken(user.Email, user.Role);
+            var token = _authService.GenerateJwtToken(user.Email, user.Role.ToString());
             return new LoginUserViewModel(user.Email, token);
         }
     }

@@ -59,7 +59,7 @@ namespace VendasWebInfrastructure.Services
             var service = new GmailService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "VendasWebAppHi",
+                ApplicationName = "VendasWebApp",
             });
 
             // Envia o e-mail

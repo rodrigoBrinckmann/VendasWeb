@@ -39,14 +39,14 @@ namespace VendasWebApi.Controllers
         /// Se colocado o parâmetro page, ele trará a pagina correspondente a consulta, no caso de haver mais de uma página
         /// </returns>        
         [HttpGet("getAllProducts")]
-        [Authorize(Roles = "ADMIN, Sales")]
+        [Authorize(Roles = "Admin, Sales")]
         public async Task<IActionResult> GetAllProductsAsync([FromQuery] GetAllProdutosQuery getAllProductsQuery)
         {
             return Ok(await _mediator.Send(getAllProductsQuery));            
         }
                 
         [HttpGet("getProductById")]
-        [Authorize(Roles = "ADMIN, Sales")]
+        [Authorize(Roles = "Admin, Sales")]
         public async Task<IActionResult> GetProdutoByIdAsync([FromQuery] GetProdutoByIdQuery query)
         {
             try
@@ -60,7 +60,7 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpPost("registerProduct")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CadastrarProduto(CreateProdutoCommand request)
         {
             await _mediator.Send(request);
@@ -68,7 +68,7 @@ namespace VendasWebApi.Controllers
         }
                 
         [HttpPut("EditProduct")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditarProduto(UpdateProdutoCommand request)
         {
             try
@@ -83,7 +83,7 @@ namespace VendasWebApi.Controllers
         }
 
         [HttpDelete("DeleteProduct")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletarProduto([FromQuery] DeleteProdutoCommand request)
         {
             try

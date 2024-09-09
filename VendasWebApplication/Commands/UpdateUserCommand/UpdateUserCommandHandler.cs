@@ -24,9 +24,9 @@ namespace VendasWebApplication.Commands.UpdateUserCommand
         }
         public async Task<UserDetailedViewModel> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var userEdit = new User(request.UserId, request.FullName, request.Email,request.Active,request.Role);
+            var userEdit = new User(request.UserId, request.FullName, request.Email,request.Active,request.Role.ToString());
             var user = await  _userRepository.EditarUserAsync(userEdit);
-            return new UserDetailedViewModel(user.UserId,user.FullName,user.Email,user.CreatedAt.ToString(CultureInfo.CreateSpecificCulture("pt-BR")), user.Active,user.Role);
+            return new UserDetailedViewModel(user.UserId,user.FullName,user.Email,user.CreatedAt.ToString(CultureInfo.CreateSpecificCulture("pt-BR")), user.Active,user.Role.ToString());
         }
     }
 }

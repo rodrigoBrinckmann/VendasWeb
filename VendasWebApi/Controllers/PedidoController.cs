@@ -39,7 +39,7 @@ namespace VendasWebApi.Controllers
         /// apareça ou no nome do cliente ou no email do cliente
         /// </returns>
         [HttpGet("getAllOrders")]
-        [Authorize(Roles ="ADMIN")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetAllOrdersAsync([FromQuery] GetAllPedidosQuery getAllPedidosQuery)
         {            
             var listaPedidos = await _mediator.Send(getAllPedidosQuery);
@@ -48,7 +48,7 @@ namespace VendasWebApi.Controllers
 
         
         [HttpGet("getOrderById")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetOrderByIdAsync([FromQuery] GetPedidoByIdQuery query)
         {
             var pedido = await _mediator.Send(query);            
@@ -59,7 +59,7 @@ namespace VendasWebApi.Controllers
 
         
         [HttpPost("registerOrder")]
-        [Authorize(Roles = "ADMIN, Sales")]
+        [Authorize(Roles = "Admin, Sales")]
         public async Task<IActionResult> CadastrarPedido([FromBody] CriarPedidoCommand pedido)
         {
             var id = await _mediator.Send(pedido);            
@@ -67,7 +67,7 @@ namespace VendasWebApi.Controllers
         }                
 
         [HttpPut("registerPayment")]
-        [Authorize(Roles = "ADMIN, Sales")]
+        [Authorize(Roles = "Admin, Sales")]
         public async Task<IActionResult> RegistrarPagamento(RegistraPagamentoCommand pagamentoCommand)
         {
             try
@@ -82,7 +82,7 @@ namespace VendasWebApi.Controllers
         }
 
         [HttpDelete("deleteOrder")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletarPedido([FromQuery] DeletarPedidoCommand deleteCommand)
         {
             try
