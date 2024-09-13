@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,16 @@ namespace VendasWebApi.Controllers
     public class PedidoController : ControllerBase
     {           
         private readonly IMediator _mediator;
+        private readonly IValidator<CriarPedidoCommand> _criarPedidoValidator;
+        private readonly IValidator<DeletarPedidoCommand> _deletarPedidoValidator;
+        private readonly IValidator<RegistraPagamentoCommand> _registraPagamentoValidator;
 
-        public PedidoController(IMediator mediator)
+        public PedidoController(IMediator mediator, IValidator<CriarPedidoCommand> criarPedidoValidator, IValidator<DeletarPedidoCommand> deletarPedidoValidator, IValidator<RegistraPagamentoCommand> registraPagamentoValidator)
         {            
             _mediator = mediator;
+            _criarPedidoValidator = criarPedidoValidator;
+            _deletarPedidoValidator = deletarPedidoValidator;
+            _registraPagamentoValidator = registraPagamentoValidator;
         }
 
 
@@ -62,6 +69,14 @@ namespace VendasWebApi.Controllers
         [Authorize(Roles = "Admin, Sales")]
         public async Task<IActionResult> CadastrarPedido([FromBody] CriarPedidoCommand pedido)
         {
+            var inputValidator = await _criarPedidoValidator.ValidateAsync(pedido, new CancellationToken());
+            if (!inputValidator.IsValid)
+            {
+                var errors = inputValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }
+
             var id = await _mediator.Send(pedido);            
             return Ok($"Pedido {id} Cadastrado com sucesso!");
         }                
@@ -70,6 +85,14 @@ namespace VendasWebApi.Controllers
         [Authorize(Roles = "Admin, Sales")]
         public async Task<IActionResult> RegistrarPagamento(RegistraPagamentoCommand pagamentoCommand)
         {
+            var inputValidator = await _registraPagamentoValidator.ValidateAsync(pagamentoCommand, new CancellationToken());
+            if (!inputValidator.IsValid)
+            {
+                var errors = inputValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }
+
             try
             {
                 var pedidofinal = await _mediator.Send(pagamentoCommand);
@@ -85,6 +108,13 @@ namespace VendasWebApi.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletarPedido([FromQuery] DeletarPedidoCommand deleteCommand)
         {
+            var inputValidator = await _deletarPedidoValidator.ValidateAsync(deleteCommand, new CancellationToken());
+            if (!inputValidator.IsValid)
+            {
+                var errors = inputValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }
             try
             {
                 await _mediator.Send(deleteCommand);

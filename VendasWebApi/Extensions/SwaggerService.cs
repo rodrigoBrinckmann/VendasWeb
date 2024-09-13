@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace VendasWebApi
+namespace VendasWebApi.Extensions
 {
     public static class SwaggerService
     {
@@ -8,17 +8,17 @@ namespace VendasWebApi
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Vendas API",
                     Version = "v1",
-                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    Contact = new OpenApiContact
                     {
                         Name = "Rodrigo Brinckmann",
                         Email = "rodrigo.brinckmann@gmail.com"
                     }
                 });
-                
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

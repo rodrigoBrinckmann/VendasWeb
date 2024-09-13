@@ -9,10 +9,12 @@ namespace VendasWebApplication.Queries.GetAllPedidos
     public class GetAllPedidosQueryHandler : IRequestHandler<GetAllPedidosQuery, PaginationResult<PedidoViewModel>>
     {
         private readonly IPedidoRepository _pedidoRepository;
-        
-        public GetAllPedidosQueryHandler(IPedidoRepository pedidoRepository)
+        private readonly ICalculos _calculos;
+
+        public GetAllPedidosQueryHandler(IPedidoRepository pedidoRepository, ICalculos calculos)
         {
             _pedidoRepository = pedidoRepository;
+            _calculos = calculos;
         }
 
         public async Task<PaginationResult<PedidoViewModel>> Handle(GetAllPedidosQuery request, CancellationToken cancellationToken)
@@ -31,7 +33,7 @@ namespace VendasWebApplication.Queries.GetAllPedidos
                         var produtoDoPedido = item.Produto;
                         var produto = new ProdutoPedidoViewModel(item.IdPedido, produtoDoPedido.IdProduto, produtoDoPedido.NomeProduto, produtoDoPedido.Valor, item.Quantidade);
                         produtosDoPedido.Add(produto);
-                        valorTotal += Calculos.CalculaValorTotal(produto.Quantidade, produto.ValorUnitario);
+                        valorTotal += _calculos.CalculaValorTotal(produto.Quantidade, produto.ValorUnitario);
                     }
                 }
 

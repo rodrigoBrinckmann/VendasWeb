@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -13,7 +14,7 @@ using VendasWebApplication.ViewModels;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
 
-namespace ControllerTests
+namespace ControllersTests
 {
     public class ItensPedidoControllerTests
     {        
@@ -33,6 +34,24 @@ namespace ControllerTests
 
             //assert
             var result = response.Should().BeOfType<OkObjectResult>().Subject;
+            result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<ItensPedidoViewModel>(It.IsAny<GetItemPedidoByIdQuery>(), new CancellationToken()), Times.Once());
+        }
+
+        [Fact(DisplayName = "ItensPedidoControllerTests - Returns Not Found")]
+        public async Task Get_ById_NotFound()
+        {
+            //arrange
+            GetItemPedidoByIdQuery request = new GetItemPedidoByIdQuery();
+            var expectedException = new KeyNotFoundException("Erro");
+            _mediatrMock.Setup(s => s.Send(It.IsAny<GetItemPedidoByIdQuery>(), new CancellationToken())).ThrowsAsync(expectedException);
+            var controller = GetController();
+
+            //act
+            var response = await controller.GetItensPedidoByIdAsync(request);
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
             result.Value.Should().NotBeNull();
             _mediatrMock.Verify(x => x.Send<ItensPedidoViewModel>(It.IsAny<GetItemPedidoByIdQuery>(), new CancellationToken()), Times.Once());
         }

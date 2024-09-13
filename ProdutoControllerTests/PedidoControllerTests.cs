@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +13,17 @@ using VendasWebApplication.Queries.GetPedidoById;
 using VendasWebApplication.ViewModels;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
+using FluentValidation.Results;
 
-namespace ControllerTests
+namespace ControllersTests
 {
     public class PedidoControllerTests
     {        
         private readonly Mock<IMediator> _mediatrMock = new();
-    
+        private readonly Mock<IValidator<CriarPedidoCommand>> _criarPedidoValidatorMock = new();
+        private readonly Mock<IValidator<DeletarPedidoCommand>> _deletarPedidoValidatorMock = new();
+        private readonly Mock<IValidator<RegistraPagamentoCommand>> _registraPagamentoValidatorMock = new();
+
 
         [Fact(DisplayName = "PedidoControllerTests - Returns ok with a single order")]
         public async Task Get_ById()
@@ -37,7 +42,7 @@ namespace ControllerTests
             result.Value.Should().NotBeNull();
         }
 
-        [Fact(DisplayName = "PedidoControllerTests - Pedido doesn' exists")]
+        [Fact(DisplayName = "PedidoControllerTests - Pedido doesn't exists")]
         public async Task Get_ById_Doesnt_exists()
         {
             //arrange            
@@ -58,7 +63,7 @@ namespace ControllerTests
         [Fact(DisplayName = "PedidoControllerTests - Returns the list of orders")]
         public async Task Get_All()
         {
-            //arrange
+            //arrange            
             PaginationResult<PedidoViewModel> listPedidos = new PaginationResult<PedidoViewModel>();
             _mediatrMock.Setup(s => s.Send(It.IsAny<GetAllPedidosQuery>(), new CancellationToken())).ReturnsAsync(listPedidos);                    
             var controller = GetController();
@@ -74,8 +79,10 @@ namespace ControllerTests
         [Fact(DisplayName = "PedidoControllerTests - Create a new order")]
         public async Task Post()
         {
-            //arrange            
-            CriarPedidoCommand pedido = new CriarPedidoCommand();            
+            //arrange
+            CriarPedidoCommand pedido = new CriarPedidoCommand();
+            ValidationResult vr = new();
+            _criarPedidoValidatorMock.Setup(v => v.ValidateAsync(pedido, new CancellationToken())).ReturnsAsync(vr);                      
             _mediatrMock.Setup(m => m.Send(It.IsAny<CriarPedidoCommand>(), new CancellationToken())).ReturnsAsync(It.IsAny<int>);
             
             var controller = GetController();
@@ -94,6 +101,8 @@ namespace ControllerTests
         {
             //arrange
             RegistraPagamentoCommand pedido = new RegistraPagamentoCommand();
+            ValidationResult vr = new();
+            _registraPagamentoValidatorMock.Setup(v => v.ValidateAsync(pedido, new CancellationToken())).ReturnsAsync(vr);
             var responseProduto = new Pedido();
             _mediatrMock.Setup(m => m.Send(It.IsAny<RegistraPagamentoCommand>(), new CancellationToken())).ReturnsAsync(responseProduto);
             var controller = GetController();
@@ -112,6 +121,8 @@ namespace ControllerTests
         {
             //arrange            
             DeletarPedidoCommand pedido = new DeletarPedidoCommand();
+            ValidationResult vr = new();
+            _deletarPedidoValidatorMock.Setup(v => v.ValidateAsync(pedido, new CancellationToken())).ReturnsAsync(vr);
             _mediatrMock.Setup(m => m.Send(It.IsAny<DeletarPedidoCommand>(), new CancellationToken()));
             var controller = GetController();
 
@@ -129,6 +140,8 @@ namespace ControllerTests
         {
             //arrange            
             RegistraPagamentoCommand pedido = new RegistraPagamentoCommand();
+            ValidationResult vr = new();
+            _registraPagamentoValidatorMock.Setup(v => v.ValidateAsync(pedido, new CancellationToken())).ReturnsAsync(vr);
             var expectedException = new KeyNotFoundException("Erro");
             _mediatrMock.Setup(m => m.Send(It.IsAny<RegistraPagamentoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);
 
@@ -141,12 +154,32 @@ namespace ControllerTests
             var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
         }
 
-        [Fact(DisplayName = "PedidoControllerTests - Delete an order - Exception")]
-        public async Task Delete_NOK()
+        [Fact(DisplayName = "PedidoControllerTests - Delete an order - DbUpdateConcurrencyException")]
+        public async Task Delete_NOK_DbUpdateConcurrencyException()
         {
             //arrange            
             DeletarPedidoCommand pedido = new DeletarPedidoCommand();
+            ValidationResult vr = new();
+            _deletarPedidoValidatorMock.Setup(v => v.ValidateAsync(pedido, new CancellationToken())).ReturnsAsync(vr);
             var expectedException = new DbUpdateConcurrencyException("Erro");            
+            _mediatrMock.Setup(m => m.Send(It.IsAny<DeletarPedidoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);
+            var controller = GetController();
+
+            //act
+            var response = await controller.DeletarPedido(pedido);
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
+        }
+
+        [Fact(DisplayName = "PedidoControllerTests - Delete an order - Exception")]
+        public async Task Delete_NOK_Exception()
+        {
+            //arrange            
+            DeletarPedidoCommand pedido = new DeletarPedidoCommand();
+            ValidationResult vr = new();
+            _deletarPedidoValidatorMock.Setup(v => v.ValidateAsync(pedido, new CancellationToken())).ReturnsAsync(vr);
+            var expectedException = new Exception("Erro");
             _mediatrMock.Setup(m => m.Send(It.IsAny<DeletarPedidoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);
             var controller = GetController();
 
@@ -159,7 +192,7 @@ namespace ControllerTests
 
         private PedidoController GetController()
         {
-            var controller = new PedidoController(_mediatrMock.Object);
+            var controller = new PedidoController(_mediatrMock.Object, _criarPedidoValidatorMock.Object, _deletarPedidoValidatorMock.Object,_registraPagamentoValidatorMock.Object);
             return controller;
         }
     }

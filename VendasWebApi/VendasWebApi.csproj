@@ -22,8 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VendasWebApplication\VendasWebApplication.csproj" />
-    <ProjectReference Include="..\VendasWebCore\VendasWebCore.csproj" />
-    <ProjectReference Include="..\VendasWebInfrastructure\VendasWebInfrastructure.csproj" />
   </ItemGroup>
 
 </Project>

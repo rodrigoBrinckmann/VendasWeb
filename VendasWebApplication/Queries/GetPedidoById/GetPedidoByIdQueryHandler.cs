@@ -17,10 +17,12 @@ namespace VendasWebApplication.Queries.GetPedidoById
     public class GetPedidoByIdQueryHandler : IRequestHandler<GetPedidoByIdQuery, PedidoViewModel>
     {
         private readonly IPedidoRepository _pedidoRepository;
+        private readonly ICalculos _calculos;
 
-        public GetPedidoByIdQueryHandler(IPedidoRepository pedidoRepository)
+        public GetPedidoByIdQueryHandler(IPedidoRepository pedidoRepository, ICalculos calculos)
         {
             _pedidoRepository = pedidoRepository;
+            _calculos = calculos;
         }
 
         public async Task<PedidoViewModel> Handle(GetPedidoByIdQuery request, CancellationToken cancellationToken)
@@ -39,7 +41,7 @@ namespace VendasWebApplication.Queries.GetPedidoById
                     var produtoDoPedido = item.Produto;
                     var produto = new ProdutoPedidoViewModel(item.IdPedido, produtoDoPedido.IdProduto, produtoDoPedido.NomeProduto, produtoDoPedido.Valor, item.Quantidade);
                     produtosDoPedido.Add(produto);
-                    valorTotal += Calculos.CalculaValorTotal(produto.Quantidade, produto.ValorUnitario);
+                    valorTotal += _calculos.CalculaValorTotal(produto.Quantidade, produto.ValorUnitario);
                 }
             }
 

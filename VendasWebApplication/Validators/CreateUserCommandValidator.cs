@@ -15,13 +15,11 @@ namespace VendasWebApplication.Validators
         {
             RuleFor(p => p.FullName)
                 .NotEmpty()
-                .NotNull()
-                .WithMessage("Nome é obrigatório!");
+                .WithMessage("Nome é obrigatório!");                
 
             RuleFor(v => v.Email)
                 .NotEmpty()
-                .NotNull()
-                .WithMessage("Email cliente é obrigatório");
+                .WithMessage("Email do usuário é obrigatório");                
 
             RuleFor(p => p.Email)
                 .EmailAddress()

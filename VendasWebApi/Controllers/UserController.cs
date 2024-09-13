@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VendasWebApplication.Commands.ChangePasswordCommand;
@@ -16,16 +17,39 @@ namespace VendasWebApi.Controllers
     public class UserController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IValidator<CreateUserCommand> _createUserCommandValidator;
+        private readonly IValidator<ChangePasswordCommand> _changePasswordCommandValidator;
+        private readonly IValidator<RetrievePasswordCommand> _retrievePasswordCommandValidator;
+        private readonly IValidator<UpdateUserCommand> _updateUserCommandValidator;
+        private readonly IValidator<LoginUserCommand> _loginUserCommandValidator;
 
-        public UserController(IMediator mediator)
+        public UserController(IMediator mediator,
+            IValidator<CreateUserCommand> createUserCommandValidator,
+            IValidator<ChangePasswordCommand> changePasswordCommandValidator,
+            IValidator<RetrievePasswordCommand> retrievePasswordCommandValidator,
+            IValidator<UpdateUserCommand> updateUserCommandValidator,
+            IValidator<LoginUserCommand> loginUserCommandValidator)
         {
             _mediator = mediator;
+            _createUserCommandValidator = createUserCommandValidator;
+            _changePasswordCommandValidator = changePasswordCommandValidator;
+            _retrievePasswordCommandValidator = retrievePasswordCommandValidator;
+            _updateUserCommandValidator = updateUserCommandValidator;
+            _loginUserCommandValidator = loginUserCommandValidator;
         }
 
         [HttpPost("createUser")]
         [AllowAnonymous]
-        public async Task<IActionResult> CadastrarUsuario([FromBody] CreateUserCommand request)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand request)
         {
+            var inputValidator = await _createUserCommandValidator.ValidateAsync(request, new CancellationToken());
+            if (!inputValidator.IsValid)
+            {
+                var errors = inputValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }
+
             var id = await _mediator.Send(request);
             return Ok($"Usuário {id} Cadastrado com sucesso!");
             //return CreatedAtAction(nameof(GetById), new { id = id }, command);
@@ -37,7 +61,7 @@ namespace VendasWebApi.Controllers
         {
             var user = await _mediator.Send(getAllUsersQuery);
             
-            if (user == null)
+            if (user.ItemsCount == 0)
             {
                 return NotFound();
             }
@@ -60,7 +84,14 @@ namespace VendasWebApi.Controllers
         [HttpPut("updateUser")]
         [Authorize(Roles = "Admin, Sales")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand request)
-        {            
+        {
+            var inputValidator = await _updateUserCommandValidator.ValidateAsync(request, new CancellationToken());
+            if (!inputValidator.IsValid)
+            {
+                var errors = inputValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }
             try
             {
                 var user = await _mediator.Send(request);                
@@ -76,6 +107,13 @@ namespace VendasWebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginUserCommand request)
         {
+            var inputValidator = await _loginUserCommandValidator.ValidateAsync(request, new CancellationToken());
+            if (!inputValidator.IsValid)
+            {
+                var errors = inputValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }
             var user = await _mediator.Send(request);
             if (user == null)
             {
@@ -88,9 +126,13 @@ namespace VendasWebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RetrievePassword([FromBody] RetrievePasswordCommand request)
         {
-            //validar se o email existe
-            //fazer a alteração no db
-            //mandar um email com o novo password para o usuário
+            var inputValidator = await _retrievePasswordCommandValidator.ValidateAsync(request, new CancellationToken());
+            if (!inputValidator.IsValid)
+            {
+                var errors = inputValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }            
             try
             {
                 var user = await _mediator.Send(request);
@@ -112,7 +154,14 @@ namespace VendasWebApi.Controllers
         [HttpPut("changePassword")]
         [AllowAnonymous]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand request)
-        {            
+        {
+            var inputValidator = await _changePasswordCommandValidator.ValidateAsync(request, new CancellationToken());
+            if (!inputValidator.IsValid)
+            {
+                var errors = inputValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }
             try
             {
                 await _mediator.Send(request);

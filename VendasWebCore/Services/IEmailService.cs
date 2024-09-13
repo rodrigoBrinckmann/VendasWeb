@@ -1,9 +1,5 @@
-﻿using Google.Apis.Gmail.v1;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Gmail.v1;
 
 namespace VendasWebCore.Services
 {
@@ -11,5 +7,6 @@ namespace VendasWebCore.Services
     {
         Task ServiceMailProcess(string toEmail, string password);
         Task SendEmailAsync(GmailService service, string password, string email);
+        Task<UserCredential> GetCredentialAsync();
     }
 }

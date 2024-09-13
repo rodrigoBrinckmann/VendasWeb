@@ -10,8 +10,13 @@ namespace VendasWebApplication.Commands.ProdutoCommands.CriarProduto
 {
     public class CreateProdutoCommand : IRequest<Unit>
     {
-        public string NomeProduto { get; private set; } = string.Empty;
-        public decimal Valor { get; private set; }
+        public string NomeProduto { get; set; } = string.Empty;
+        public decimal Valor { get; set; }
+
+        public CreateProdutoCommand()
+        {
+            
+        }
 
         public CreateProdutoCommand(string nomeProduto, decimal valor)
         {

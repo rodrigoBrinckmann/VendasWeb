@@ -4,14 +4,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 
-namespace VendasWebApi
+namespace VendasWebApi.Extensions
 {
-    public static class AuthenticationService 
+    public static class AuthenticationService
     {
         public static IServiceCollection AddAuthenticationService(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>            
+                .AddJwtBearer(options =>
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -24,7 +24,7 @@ namespace VendasWebApi
                     IssuerSigningKey = new SymmetricSecurityKey
                     (Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
                 }
-            );            
+            );
             return services;
         }
     }

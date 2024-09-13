@@ -1,9 +1,9 @@
 ﻿
 namespace VendasWebCore.Calculation
 {
-    public static class Calculos
+    public class Calculos : ICalculos
     {
-        public static decimal CalculaValorTotal(int quantidade, decimal valorUnitario)
+        public decimal CalculaValorTotal(int quantidade, decimal valorUnitario)
         {   
             return quantidade * valorUnitario;
         }

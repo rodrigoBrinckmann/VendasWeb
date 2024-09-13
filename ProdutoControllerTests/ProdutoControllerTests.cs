@@ -1,5 +1,7 @@
 using FluentAssertions;
+using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -11,16 +13,20 @@ using VendasWebApplication.Queries.GetAllProdutos;
 using VendasWebApplication.Queries.GetProdutoById;
 using VendasWebApplication.ViewModels;
 using VendasWebCore.Models;
+using FluentValidation.Results;
 
 
-namespace ControllerTests
+namespace ControllersTests
 {
     public class ProdutoControllerTests
     {           
         private readonly Mock<IMediator> _mediatrMock = new();
-                        
-                
-        [Fact(DisplayName = "ProdutoControllerTests - Returns ok with a single product")]
+        private readonly Mock<IValidator<CreateProdutoCommand>> _createProductvalidatorMock = new();
+        private readonly Mock<IValidator<DeleteProdutoCommand>> _deleteProductvalidatorMock = new();
+        private readonly Mock<IValidator<UpdateProdutoCommand>> _updateProductvalidatorMock = new();
+
+
+        [Fact(DisplayName = "ProdutoControllerTests - Get_ById - Returns ok with a single product")]
         public async Task Get_ById()
         {
             //arrange            
@@ -38,8 +44,28 @@ namespace ControllerTests
             result.Value.Should().NotBeNull();
             _mediatrMock.Verify(x => x.Send<ProdutoViewModel>(It.IsAny<GetProdutoByIdQuery>(), new CancellationToken()), Times.Once());
         }
-                
-        [Fact(DisplayName = "ProdutoControllerTests - Returns the list of products")]
+
+        [Fact(DisplayName = "ProdutoControllerTests - Get_ById_NotFound - Returns Not Found")]
+        public async Task Get_ById_NotFound()
+        {
+            //arrange
+            GetProdutoByIdQuery getProdutoByIdQuery = new GetProdutoByIdQuery();
+            var expectedException = new Exception("Erro");
+            _mediatrMock.Setup(m => m.Send<ProdutoViewModel>(It.IsAny<GetProdutoByIdQuery>(), new CancellationToken())).ThrowsAsync(expectedException);
+
+            var controller = GetController();
+
+            //act
+            var response = await controller.GetProdutoByIdAsync(getProdutoByIdQuery);
+
+            //assert
+            var result = response.Should().BeOfType<BadRequestObjectResult>().Subject;
+            result.Value.Should().NotBeNull();
+            _mediatrMock.Verify(x => x.Send<ProdutoViewModel>(It.IsAny<GetProdutoByIdQuery>(), new CancellationToken()), Times.Once());
+        }
+
+
+        [Fact(DisplayName = "ProdutoControllerTests - Get_All - Returns the list of products")]
         public async Task Get_All()
         {
             //arrange
@@ -60,11 +86,13 @@ namespace ControllerTests
             _mediatrMock.Verify(x => x.Send<PaginationResult<ProdutoViewModel>>(It.IsAny<GetAllProdutosQuery>(), new CancellationToken()), Times.Once());
         }
 
-        [Fact(DisplayName = "ProdutoControllerTests - Create a new product")]
-        public async Task Post()
+        [Fact(DisplayName = "ProdutoControllerTests - Post_CreateProduct - Create a new product")]
+        public async Task Post_CreateProduct()
         {
             //arrange            
             CreateProdutoCommand produto = new CreateProdutoCommand("Produto1", 10m);
+            ValidationResult vr = new();
+            _createProductvalidatorMock.Setup(v => v.ValidateAsync(produto, new CancellationToken())).ReturnsAsync(vr);
             _mediatrMock.Setup(m => m.Send(It.IsAny<CreateProdutoCommand>(), new CancellationToken()));
                         
             var controller = GetController();
@@ -79,7 +107,7 @@ namespace ControllerTests
         }
 
         [Fact(DisplayName = "ProdutoControllerTests - Edit a product")]
-        public async Task Put()
+        public async Task Put_EditProduct()
         {
             //arrange            
             UpdateProdutoCommand produto = new UpdateProdutoCommand(1,"Produto1",10m);
@@ -97,10 +125,12 @@ namespace ControllerTests
         }
 
         [Fact(DisplayName = "ProdutoControllerTests - Delete a product")]
-        public async Task Delete()
+        public async Task Delete_Product()
         {
             //arrange            
             DeleteProdutoCommand produto = new DeleteProdutoCommand(1);
+            ValidationResult vr = new();
+            _deleteProductvalidatorMock.Setup(v => v.ValidateAsync(produto, new CancellationToken())).ReturnsAsync(vr);
             _mediatrMock.Setup(m => m.Send(It.IsAny<DeleteProdutoCommand>(), new CancellationToken()));
 
             var controller = GetController();
@@ -115,7 +145,7 @@ namespace ControllerTests
         }
 
         [Fact(DisplayName = "ProdutoControllerTests - Edit a product - Exception")]
-        public async Task Put_NOK()
+        public async Task Put_Edit_product_NOK()
         {
             //arrange            
             UpdateProdutoCommand produto = new UpdateProdutoCommand(1,"Produto X", 7m);
@@ -132,10 +162,12 @@ namespace ControllerTests
         }
 
         [Fact(DisplayName = "ProdutoControllerTests - Delete a product - Exception")]
-        public async Task Delete_NOK()
+        public async Task DeleteProduct_NOK()
         {
-            //arrange            
+            //arrange
             DeleteProdutoCommand produto = new DeleteProdutoCommand(1);
+            ValidationResult vr = new();
+            _deleteProductvalidatorMock.Setup(v => v.ValidateAsync(produto, new CancellationToken())).ReturnsAsync(vr);
             var expectedException = new DbUpdateConcurrencyException("Erro");
             _mediatrMock.Setup(m => m.Send(It.IsAny<DeleteProdutoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);
             
@@ -150,7 +182,7 @@ namespace ControllerTests
 
         private ProdutoController GetController()
         {
-            var controller = new ProdutoController(_mediatrMock.Object);
+            var controller = new ProdutoController(_mediatrMock.Object, _createProductvalidatorMock.Object, _deleteProductvalidatorMock.Object, _updateProductvalidatorMock.Object);
             return controller;
         }
     }

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace VendasWebApplication
 {
-    public static class ApplicationModule
+    public static class ApplicationExtension
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {

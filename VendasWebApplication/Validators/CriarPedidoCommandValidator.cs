@@ -13,8 +13,7 @@ namespace VendasWebApplication.Validators
         public CriarPedidoCommandValidator()
         {
             RuleFor(v => v.UserId)
-                .NotEmpty()
-                .NotNull()
+                .NotEmpty()                
                 .WithMessage("Cliente é obrigatório");            
         }
     }

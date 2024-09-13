@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 
-namespace VendasWebInfrastructure.AuthService
+namespace VendasWebInfrastructure.AuthServices
 {
     public class AuthService : IAuthService
     {
