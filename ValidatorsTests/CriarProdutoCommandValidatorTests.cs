@@ -3,20 +3,10 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VendasWebApi.Controllers;
-using VendasWebApplication.Commands.ChangePasswordCommand;
-using VendasWebApplication.Commands.CreateUserCommand;
-using VendasWebApplication.Commands.LoginUserCommands;
 using VendasWebApplication.Commands.ProdutoCommands.CriarProduto;
 using VendasWebApplication.Commands.ProdutoCommands.DeletarProduto;
 using VendasWebApplication.Commands.ProdutoCommands.UpdateProduto;
-using VendasWebApplication.Commands.RetrievePasswordCommand;
-using VendasWebApplication.Commands.UpdateUserCommand;
 
 using VendasWebApplication.Validators;
 

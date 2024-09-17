@@ -10,7 +10,6 @@ namespace VendasWebApplication.Validators
         {
             RuleFor(v => v.Id).NotEmpty()
                 .WithMessage("É obrigatório fornecer o ID do pedido a ser editado");
-
         }
 
     }

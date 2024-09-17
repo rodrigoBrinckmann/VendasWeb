@@ -109,10 +109,12 @@ namespace ControllersTests
         [Fact(DisplayName = "ProdutoControllerTests - Edit a product")]
         public async Task Put_EditProduct()
         {
-            //arrange            
-            UpdateProdutoCommand produto = new UpdateProdutoCommand(1,"Produto1",10m);
+            //arrange
+            UpdateProdutoCommand produto = new UpdateProdutoCommand { Id = 1, NomeProduto = "Produto1", Valor = 10m };
             _mediatrMock.Setup(m => m.Send(It.IsAny<UpdateProdutoCommand>(), new CancellationToken()));
-            
+            ValidationResult vr = new();
+            _updateProductvalidatorMock.Setup(v => v.ValidateAsync(produto, new CancellationToken())).ReturnsAsync(vr);
+
             var controller = GetController();
 
             //act
@@ -148,10 +150,12 @@ namespace ControllersTests
         public async Task Put_Edit_product_NOK()
         {
             //arrange            
-            UpdateProdutoCommand produto = new UpdateProdutoCommand(1,"Produto X", 7m);
+            UpdateProdutoCommand produto = new UpdateProdutoCommand { Id = 1, NomeProduto = "Produto1", Valor = 10m };
             var expectedException = new KeyNotFoundException("Erro");
             _mediatrMock.Setup(m => m.Send(It.IsAny<UpdateProdutoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);
-                        
+            ValidationResult vr = new();
+            _updateProductvalidatorMock.Setup(v => v.ValidateAsync(produto, new CancellationToken())).ReturnsAsync(vr);
+
             var controller = GetController();
 
             //act

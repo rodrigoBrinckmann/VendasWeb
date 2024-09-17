@@ -8,18 +8,15 @@ namespace VendasWebApplication.Validators
         public EditarItensPedidoCommandValidator()
         {
             RuleFor(p => p.Id)
-               .NotEmpty()
-               .NotNull()
+               .NotEmpty()               
                .WithMessage("Id é obrigatório para edição");
 
             RuleFor(p => p.IdPedido)
-               .NotEmpty()
-               .NotNull()
+               .NotEmpty()               
                .WithMessage("IdPedido é obrigatório para edição");
 
             RuleFor(p => p.IdProduto)
-               .NotEmpty()
-               .NotNull()
+               .NotEmpty()               
                .WithMessage("IdProduto é obrigatório para edição");
         }
     }

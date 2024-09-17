@@ -8,8 +8,7 @@ namespace VendasWebApplication.Validators
         public UpdateProdutoCommandValidator()
         {
             RuleFor(v => v.Id)
-                .NotEmpty()
-                .NotNull()
+                .NotEmpty()                
                 .WithMessage("É obrigatório fornecer o ID do produto a ser editado");
 
             RuleFor(v => v.NomeProduto)

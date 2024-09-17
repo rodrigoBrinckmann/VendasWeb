@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -10,16 +11,21 @@ using VendasWebApplication.Commands.ItensPedidoCommands.DeletarItensPedido;
 using VendasWebApplication.Commands.ItensPedidoCommands.EditarItensPedido;
 using VendasWebApplication.Queries.GetAllItensPedidos;
 using VendasWebApplication.Queries.GetItemPedidoById;
+using VendasWebApplication.Validators;
 using VendasWebApplication.ViewModels;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
+using FluentValidation.Results;
 
 namespace ControllersTests
 {
     public class ItensPedidoControllerTests
     {        
         private readonly Mock<IMediator> _mediatrMock = new();
-        
+        private readonly Mock<IValidator<DeletarItensPedidoCommand>> _deletarItensPedidoCommandValidator = new();
+        private readonly Mock<IValidator<EditarItensPedidoCommand>> _editarItensPedidoCommandValidator = new ();
+
+
         [Fact(DisplayName = "ItensPedidoControllerTests - Returns ok with a single itemPedido")]
         public async Task Get_ById()
         {
@@ -97,7 +103,9 @@ namespace ControllersTests
             //arrange            
             ItensPedido itensPedido = new ItensPedido() { IdPedido = 5};
             EditarItensPedidoCommand command = new();
-            _mediatrMock.Setup(s => s.Send(It.IsAny<EditarItensPedidoCommand>(), new CancellationToken())).ReturnsAsync(itensPedido);            
+            _mediatrMock.Setup(s => s.Send(It.IsAny<EditarItensPedidoCommand>(), new CancellationToken())).ReturnsAsync(itensPedido);
+            ValidationResult vr = new();
+            _editarItensPedidoCommandValidator.Setup(v => v.ValidateAsync(command, new CancellationToken())).ReturnsAsync(vr);
             var controller = GetController();
 
             //act
@@ -112,9 +120,12 @@ namespace ControllersTests
         [Fact(DisplayName = "ItensPedidoControllerTests - Deletar ItemPedido")]
         public async Task Delete()
         {
-            //arrange
+            //arrange            
             DeletarItensPedidoCommand command = new();
             _mediatrMock.Setup(s => s.Send(It.IsAny<DeletarItensPedidoCommand>(), new CancellationToken()));
+            ValidationResult vr = new();
+            _deletarItensPedidoCommandValidator.Setup(v => v.ValidateAsync(command, new CancellationToken())).ReturnsAsync(vr);
+
             var controller = GetController();
 
             //act
@@ -132,6 +143,8 @@ namespace ControllersTests
             //arrange            
             ItensPedido itensPedido = new ItensPedido() { IdPedido = 0 };
             EditarItensPedidoCommand command = new();
+            ValidationResult vr = new();
+            _editarItensPedidoCommandValidator.Setup(v => v.ValidateAsync(command, new CancellationToken())).ReturnsAsync(vr);
             _mediatrMock.Setup(s => s.Send(It.IsAny<EditarItensPedidoCommand>(), new CancellationToken())).ReturnsAsync(itensPedido);
             var controller = GetController();
 
@@ -148,7 +161,9 @@ namespace ControllersTests
             //arrange
             DeletarItensPedidoCommand command = new();
             var expectedException = new DbUpdateConcurrencyException("Erro");
-            _mediatrMock.Setup(s => s.Send(It.IsAny<DeletarItensPedidoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);            
+            _mediatrMock.Setup(s => s.Send(It.IsAny<DeletarItensPedidoCommand>(), new CancellationToken())).ThrowsAsync(expectedException);
+            ValidationResult vr = new();
+            _deletarItensPedidoCommandValidator.Setup(v => v.ValidateAsync(command, new CancellationToken())).ReturnsAsync(vr);
             var controller = GetController();
 
             //act
@@ -160,7 +175,7 @@ namespace ControllersTests
 
         private ItensPedidoController GetController()
         {
-            var controller = new ItensPedidoController(_mediatrMock.Object);
+            var controller = new ItensPedidoController(_mediatrMock.Object, _deletarItensPedidoCommandValidator.Object, _editarItensPedidoCommandValidator.Object);
             return controller;
         }
     }

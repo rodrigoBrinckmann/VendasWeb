@@ -8,8 +8,7 @@ namespace VendasWebApplication.Validators
         public DeleteProdutoCommandValidator()
         {
             RuleFor(v => v.Id)
-                .NotEmpty()
-                .NotNull()
+                .NotEmpty()                
                 .WithMessage("Id não pode ser nulo para deleção");
         }
     }

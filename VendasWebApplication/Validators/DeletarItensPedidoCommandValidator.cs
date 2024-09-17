@@ -13,8 +13,7 @@ namespace VendasWebApplication.Validators
         public DeletarItensPedidoCommandValidator()
         {
             RuleFor(p => p.Id)
-               .NotEmpty()
-               .NotNull()
+               .NotEmpty()               
                .WithMessage("Id é obrigatório para deleção");
         }
     }

@@ -9,15 +9,15 @@ namespace VendasWebApplication.Commands.ProdutoCommands.UpdateProduto
 {
     public class UpdateProdutoCommand : IRequest<Unit>
     {
-        public int Id { get; private set; }
-        public string? NomeProduto { get; private set; } = string.Empty;
-        public decimal Valor { get; private set; }
+        public int Id { get;  set; }
+        public string? NomeProduto { get;  set; } = string.Empty;
+        public decimal Valor { get;  set; }
 
-        public UpdateProdutoCommand(int id, string nomeProduto, decimal valor)
-        {
-            Id = id;
-            NomeProduto = nomeProduto;
-            Valor = valor;
-        }
+        //public UpdateProdutoCommand(int id, string nomeProduto, decimal valor)
+        //{
+        //    Id = id;
+        //    NomeProduto = nomeProduto;
+        //    Valor = valor;
+        //}
     }
 }

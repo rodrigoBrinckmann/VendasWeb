@@ -92,6 +92,14 @@ namespace VendasWebApi.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditarProduto(UpdateProdutoCommand request)
         {
+            var productValidator = await _updateProductvalidator.ValidateAsync(request, new CancellationToken());
+            if (!productValidator.IsValid)
+            {
+                var errors = productValidator.ToDictionary();
+
+                return new BadRequestObjectResult(errors);
+            }
+
             try
             {
                 await _mediator.Send(request);
