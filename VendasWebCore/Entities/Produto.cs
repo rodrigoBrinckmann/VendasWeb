@@ -32,6 +32,13 @@ namespace VendasWebCore.Entities
             Valor = valor;            
         }
 
+        public Produto(string nomeProduto, decimal valor, int userId)
+        {
+            NomeProduto = nomeProduto;
+            Valor = valor;
+            UserId = userId;
+        }
+
         public void Update(Produto produto)
         {
             if (produto.Valor > 0)

@@ -23,11 +23,16 @@ namespace VendasWebApplication.Commands.CreateUserCommand
 
         public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var passwordHash = _authService.ComputeSha256Hash(request.Password);
-            var user = new User(request.FullName,request.Email, passwordHash, request.Role.ToString());
+            var user = await _userRepository.GetUserByEmail(request.Email);
+            if (user != null)
+            {
+                throw new Exception("User email already exists. Please contact support to change your role if necessary, or try to retrieve your password.");
+            }
+            var passwordHash = _authService.ComputeSha256Hash(request.Password);            
+            var newUser = new User(request.FullName,request.Email, passwordHash, request.Role.ToString());
 
-            await _userRepository.CadastrarUserAsync(user);
-            return user.UserId;
+            await _userRepository.CadastrarUserAsync(newUser);
+            return newUser.UserId;
         }
     }
 }

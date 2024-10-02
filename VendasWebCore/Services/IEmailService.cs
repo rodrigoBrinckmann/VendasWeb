@@ -5,8 +5,8 @@ namespace VendasWebCore.Services
 {
     public interface IEmailService
     {
-        Task ServiceMailProcess(string toEmail, string password);
-        Task SendEmailAsync(GmailService service, string password, string email);
+        Task<GmailService> ServiceMailProcess();
+        Task SendEmailAsync(string email, string body, string title);
         Task<UserCredential> GetCredentialAsync();
     }
 }

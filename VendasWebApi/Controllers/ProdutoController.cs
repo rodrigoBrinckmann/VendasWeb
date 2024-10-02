@@ -1,19 +1,13 @@
 ﻿using FluentValidation;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using VendasWebApplication.Commands.ProdutoCommands.CriarProduto;
 using VendasWebApplication.Commands.ProdutoCommands.DeletarProduto;
 using VendasWebApplication.Commands.ProdutoCommands.UpdateProduto;
 using VendasWebApplication.Queries.GetAllProdutos;
 using VendasWebApplication.Queries.GetProdutoById;
-using VendasWebApplication.Validators;
-using VendasWebCore.Entities;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

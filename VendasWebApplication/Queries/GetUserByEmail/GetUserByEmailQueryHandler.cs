@@ -11,27 +11,21 @@ using VendasWebCore.Repositories;
 
 namespace VendasWebApplication.Queries.GetUserByEmail
 {
-    public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, List<UserDetailedViewModel>>
+    public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, UserDetailedViewModel>
     {
         private readonly IUserRepository _userRepository;
         public GetUserByEmailQueryHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
-        public async Task<List<UserDetailedViewModel>> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+        public async Task<UserDetailedViewModel> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
-            var result = await _userRepository.GetUserByEmail(request.Email);
-            List <UserDetailedViewModel> listUserDetailedViewModel = new List <UserDetailedViewModel>();
-
+            var result = await _userRepository.GetUserByEmail(request.Email);            
+            UserDetailedViewModel userDetailedViewModel = new UserDetailedViewModel();
             if (result is not null)
             {
-                foreach (var item in result)
-                {
-                    var userDetailedViewModel = new UserDetailedViewModel(item.UserId, item.FullName, item.Email, item.CreatedAt.ToString(CultureInfo.CreateSpecificCulture("pt-BR")), item.Active, item.Role);
-                    listUserDetailedViewModel.Add(userDetailedViewModel);
-                }
-                return listUserDetailedViewModel;
-            }
+                userDetailedViewModel = new UserDetailedViewModel(result.UserId, result.FullName, result.Email, result.CreatedAt.ToString(CultureInfo.CreateSpecificCulture("pt-BR")), result.Active, result.Role);
+            }            
             return null;            
         }
     }

@@ -8,7 +8,7 @@ using VendasWebApplication.ViewModels;
 
 namespace VendasWebApplication.Queries.GetUserByEmail
 {
-    public class GetUserByEmailQuery : IRequest<List<UserDetailedViewModel>>
+    public class GetUserByEmailQuery : IRequest<UserDetailedViewModel>
     {
         public string Email { get; set; }
     }

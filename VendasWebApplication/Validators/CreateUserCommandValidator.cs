@@ -36,6 +36,10 @@ namespace VendasWebApplication.Validators
             RuleFor(p => p.Password)
                 .Must(ValidPassword)
                 .WithMessage("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial");
+
+            RuleFor(r => r.Role)
+                .IsInEnum()
+                .WithMessage("Role inválida!");
         }
 
         public bool ValidPassword(string password)

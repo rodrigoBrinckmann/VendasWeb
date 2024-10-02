@@ -15,7 +15,7 @@ namespace VendasWebApplication.Validators
                 .MaximumLength(20)
                 .WithMessage("Nome do produto não pode exceder 20 posições");
 
-            RuleFor(v => v.Valor)
+            RuleFor(v => v.ValorUnitario)
                 .NotEmpty()                
                 .WithMessage("Valor é obrigatório");
         }

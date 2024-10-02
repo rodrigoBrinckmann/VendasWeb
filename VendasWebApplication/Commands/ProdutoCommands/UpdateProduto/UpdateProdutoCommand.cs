@@ -17,7 +17,7 @@ namespace VendasWebApplication.Commands.ProdutoCommands.UpdateProduto
         //{
         //    Id = id;
         //    NomeProduto = nomeProduto;
-        //    Valor = valor;
+        //    ValorUnitario = valor;
         //}
     }
 }

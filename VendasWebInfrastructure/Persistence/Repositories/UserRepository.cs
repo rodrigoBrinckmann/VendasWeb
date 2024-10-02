@@ -1,15 +1,7 @@
-﻿using Azure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using VendasWebCore.Entities;
 using VendasWebCore.Models;
 using VendasWebCore.Repositories;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VendasWebInfrastructure.Persistence.Repositories
 {
@@ -67,20 +59,36 @@ namespace VendasWebInfrastructure.Persistence.Repositories
             return await users.GetPaged<User>(page, PAGE_SIZE);
         }
 
-        public async Task<List<User>> GetUserByEmail(string email)
+        public async Task<User> GetUserByEmail(string email)
         {
-            IQueryable<User> users = _dbContext.Users;
-            return users.Where(e => e.Email.Contains(email)).ToList();                
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Active == true);
+            //IQueryable<User> users = _dbContext.Users;
+            //return users.Where(e => e.Email.Contains(email)).ToList();                
         }
 
-        public async Task ChangePasswordAsync(string email, string oldPassword, string newPassword)
+        public async Task<User> GetUserByEmailAndRole(string email, string role)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Role == role && u.Active == true);
+            //IQueryable<User> users = _dbContext.Users;
+            //return users.Where(e => e.Email.Contains(email) &&
+            //          e.Role == role && e.Active == true).ToList();
+        }
+
+        public async Task<User> GetUserByEmailAndPasswordAndRole(string email, string password, string role)
+        {
+            //IQueryable<User> users = _dbContext.Users;
+            return await _dbContext.Users.SingleOrDefaultAsync(e => e.Email.Contains(email) &&
+                      e.Password == password && e.Role == role && e.Active == true);
+        }
+
+        public async Task ChangePasswordAsync(User user, string oldPassword, string newPassword)
         {
             try
             {
-                var userDB = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == oldPassword);
-                if (userDB is not null)
+                //var userDB = await _dbContext.Users.SingleOrDefaultAsync(u => u.UserId == userId);
+                if (user is not null)
                 {
-                    userDB.UpdatePassword(newPassword);
+                    user.UpdatePassword(newPassword);
                     await SaveChangesASync();                    
                 }
                 else

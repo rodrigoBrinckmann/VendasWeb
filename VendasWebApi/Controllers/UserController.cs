@@ -49,9 +49,16 @@ namespace VendasWebApi.Controllers
 
                 return new BadRequestObjectResult(errors);
             }
+            try
+            {
+                var id = await _mediator.Send(request);
+                return Ok($"Usuário {id} Cadastrado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            var id = await _mediator.Send(request);
-            return Ok($"Usuário {id} Cadastrado com sucesso!");
             //return CreatedAtAction(nameof(GetById), new { id = id }, command);
         }        
 
@@ -136,11 +143,11 @@ namespace VendasWebApi.Controllers
             try
             {
                 var user = await _mediator.Send(request);
-                if (user.Count > 0)
+                if (user.UserId != 0)
                 {
                     return Ok(user);
                 }
-                else 
+                else
                 {
                     throw new KeyNotFoundException("Usuário inexistente na base de dados");
                 }

@@ -11,17 +11,14 @@ namespace VendasWebApplication.Commands.ProdutoCommands.CriarProduto
     public class CreateProdutoCommand : IRequest<Unit>
     {
         public string NomeProduto { get; set; } = string.Empty;
-        public decimal Valor { get; set; }
+        public decimal ValorUnitario { get; set; }        
 
-        public CreateProdutoCommand()
-        {
-            
-        }
+        public CreateProdutoCommand(){ }
 
-        public CreateProdutoCommand(string nomeProduto, decimal valor)
+        public CreateProdutoCommand(string nomeProduto, decimal valor, int userId)
         {
             NomeProduto = nomeProduto;
-            Valor = valor;
+            ValorUnitario = valor;            
         }
     }
 }

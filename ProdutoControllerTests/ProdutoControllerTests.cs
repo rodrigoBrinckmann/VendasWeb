@@ -90,7 +90,7 @@ namespace ControllersTests
         public async Task Post_CreateProduct()
         {
             //arrange            
-            CreateProdutoCommand produto = new CreateProdutoCommand("Produto1", 10m);
+            CreateProdutoCommand produto = new CreateProdutoCommand("Produto1", 10m,1);
             ValidationResult vr = new();
             _createProductvalidatorMock.Setup(v => v.ValidateAsync(produto, new CancellationToken())).ReturnsAsync(vr);
             _mediatrMock.Setup(m => m.Send(It.IsAny<CreateProdutoCommand>(), new CancellationToken()));

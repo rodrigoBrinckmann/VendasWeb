@@ -31,7 +31,7 @@ namespace ValidatorsTests
         public async Task NomeProduto_empty_NOK()
         {
             //arrange
-            CreateProdutoCommand request = new CreateProdutoCommand("", 10m);
+            CreateProdutoCommand request = new CreateProdutoCommand("", 10m,1);
             var resultDictionary = new Dictionary<string, List<string>>();
             resultDictionary.Add("NomeProduto", new List<string>() { "Nome do produto é obrigatório" });
 
@@ -48,7 +48,7 @@ namespace ValidatorsTests
         public async Task NomeProduto_oversized_NOK()
         {
             //arrange
-            CreateProdutoCommand request = new CreateProdutoCommand("Produto oversized maior que 20 posições para validar", 10m);
+            CreateProdutoCommand request = new CreateProdutoCommand("Produto oversized maior que 20 posições para validar", 10m,1);
             var resultDictionary = new Dictionary<string, List<string>>();
             resultDictionary.Add("NomeProduto", new List<string>() { "Nome do produto não pode exceder 20 posições" });
 

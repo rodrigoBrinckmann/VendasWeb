@@ -10,7 +10,7 @@ namespace VendasWebApplication.ViewModels
     {
         public int Id { get; set; }
         public string NomeProduto { get; set; }
-        public decimal ValorUnitario { get; set; }
+        public decimal ValorUnitario { get; set; }        
 
         public ProdutoViewModel()
         {

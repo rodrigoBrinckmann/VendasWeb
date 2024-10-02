@@ -50,9 +50,10 @@ namespace VendasWebInfrastructure.Persistence.Repositories
         public async Task<Pedido> ListarPedidoEspecífico(int idPedido)
         {
             var pedido = await _dbContext.Pedidos
-                .Include(i => i.ItensPedidos)                
-                .ThenInclude(p => p.Produto)
-                 .ThenInclude(u => u.User)
+                .Include(u => u.Cliente)
+                .Include(i => i.ItensPedidos)
+                    .ThenInclude(p => p.Produto)
+                    .ThenInclude(u => u.User)
                 .SingleOrDefaultAsync(p => p.IdPedido == idPedido);
 
             if (pedido == null) return null;

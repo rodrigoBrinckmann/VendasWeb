@@ -12,10 +12,12 @@ namespace VendasWebCore.Repositories
     {
         Task CadastrarUserAsync(User user);
         Task<User> GetUserByEmailAndPasswordAsync(string email, string passwordHash);
-        Task ChangePasswordAsync(string email, string oldPassword, string newPassword);
+        Task<User> GetUserByEmailAndPasswordAndRole(string email, string password, string role);
+        Task ChangePasswordAsync(User user, string oldPassword, string newPassword);
         Task<User> EditarUserAsync(User user);
         Task<PaginationResult<User>> GetListOfUsers(string query, int page);
-        Task<List<User>> GetUserByEmail(string email);
+        Task<User> GetUserByEmail(string email);
+        Task<User> GetUserByEmailAndRole(string email, string role);
         Task SaveChangesASync();
     }
 }

@@ -17,6 +17,8 @@ namespace VendasWebApplication.ViewModels
         public bool Active { get; set; }
         public string Role { get; set; }
 
+        public UserDetailedViewModel(){}
+
         public UserDetailedViewModel(string fullName, string email)
         {            
             FullName = fullName;
